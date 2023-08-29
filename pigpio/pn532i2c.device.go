@@ -45,11 +45,11 @@ func (d *PN532PiGPIOI2CDevice) InitiatorInit() error {
 	panic("TODO")
 }
 
-func (d *PN532PiGPIOI2CDevice) InitiatorListPassiveTargets(m gonfc.Modulation) ([]gonfc.Target, error) {
+func (d *PN532PiGPIOI2CDevice) InitiatorListPassiveTargets(m gonfc.Modulation) ([]*gonfc.NfcTarget, error) {
 	panic("TODO")
 }
 
-func (d *PN532PiGPIOI2CDevice) InitiatorSelectPassiveTarget(m gonfc.Modulation, initData []byte) (gonfc.Target, error) {
+func (d *PN532PiGPIOI2CDevice) InitiatorSelectPassiveTarget(m gonfc.Modulation, initData []byte) (*gonfc.NfcTarget, error) {
 	panic("TODO")
 }
 

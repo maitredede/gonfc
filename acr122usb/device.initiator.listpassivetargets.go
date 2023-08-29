@@ -3,9 +3,9 @@ package acr122usb
 import "github.com/maitredede/gonfc"
 
 // TODO move to gonfc
-func (pnd *Acr122UsbDevice) InitiatorListPassiveTargets(nm gonfc.Modulation) ([]gonfc.Target, error) {
+func (pnd *Acr122UsbDevice) InitiatorListPassiveTargets(nm gonfc.Modulation) ([]*gonfc.NfcTarget, error) {
 
-	ant := make([]gonfc.Target, 0)
+	ant := make([]*gonfc.NfcTarget, 0)
 
 	pnd.LastError = nil
 	// Let the reader only try once to find a tag
@@ -17,7 +17,7 @@ func (pnd *Acr122UsbDevice) InitiatorListPassiveTargets(nm gonfc.Modulation) ([]
 
 	pbtInitData := prepateInitiatorData(nm)
 
-	var nt gonfc.Target
+	var nt *gonfc.NfcTarget
 	var err error
 	for {
 		nt, err = pnd.InitiatorSelectPassiveTarget(nm, pbtInitData)

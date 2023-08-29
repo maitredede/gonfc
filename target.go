@@ -7,11 +7,6 @@ import (
 	"github.com/maitredede/gonfc/utils"
 )
 
-type Target interface {
-	Modulation() Modulation
-	String() string
-}
-
 type NfcTarget struct {
 	NTI *NfcTargetInfo
 	NM  Modulation
@@ -77,12 +72,6 @@ type NfcFelicaInfo struct {
 	abtId      [8]byte
 	abtPad     [8]byte
 	abtSysCode [2]byte
-}
-
-var _ Target = (*NfcTarget)(nil)
-
-func (t *NfcTarget) Modulation() Modulation {
-	return t.NM
 }
 
 type NfcDepInfo struct {

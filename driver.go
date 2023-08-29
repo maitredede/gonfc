@@ -24,8 +24,8 @@ type Device interface {
 	SetPropertyInt(property Property, value int) error
 
 	InitiatorInit() error
-	InitiatorListPassiveTargets(m Modulation) ([]Target, error)
-	InitiatorSelectPassiveTarget(m Modulation, initData []byte) (Target, error)
+	InitiatorListPassiveTargets(m Modulation) ([]*NfcTarget, error)
+	InitiatorSelectPassiveTarget(m Modulation, initData []byte) (*NfcTarget, error)
 	InitiatorTransceiveBytes(tx, rx []byte, timeout int) (int, error)
 	InitiatorDeselectTarget() error
 }

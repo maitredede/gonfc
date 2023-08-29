@@ -2,7 +2,7 @@ package acr122usb
 
 import "github.com/maitredede/gonfc"
 
-func (pnd *Acr122UsbDevice) InitiatorSelectPassiveTarget(nm gonfc.Modulation, initData []byte) (gonfc.Target, error) {
+func (pnd *Acr122UsbDevice) InitiatorSelectPassiveTarget(nm gonfc.Modulation, initData []byte) (*gonfc.NfcTarget, error) {
 	szInitData := len(initData)
 
 	var abtInit []byte
