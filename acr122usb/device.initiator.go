@@ -3,61 +3,39 @@ package acr122usb
 import "github.com/maitredede/gonfc"
 
 func (pnd *Acr122UsbDevice) InitiatorInit() error {
+	// Drop the field for a while
+	if err := pnd.SetPropertyBool(gonfc.NP_ACTIVATE_FIELD, false); err != nil {
+		return err
+	}
+	// Enable field so more power consuming cards can power themselves up
+	if err := pnd.SetPropertyBool(gonfc.NP_ACTIVATE_FIELD, true); err != nil {
+		return err
+	}
+	// Let the device try forever to find a target/tag
+	if err := pnd.SetPropertyBool(gonfc.NP_INFINITE_SELECT, true); err != nil {
+		return err
+	}
+	// Activate auto ISO14443-4 switching by default
+	if err := pnd.SetPropertyBool(gonfc.NP_AUTO_ISO14443_4, true); err != nil {
+		return err
+	}
+	// Force 14443-A mode
+	if err := pnd.SetPropertyBool(gonfc.NP_FORCE_ISO14443_A, true); err != nil {
+		return err
+	}
+	// Force speed at 106kbps
+	if err := pnd.SetPropertyBool(gonfc.NP_FORCE_SPEED_106, true); err != nil {
+		return err
+	}
+	// Disallow invalid frame
+	if err := pnd.SetPropertyBool(gonfc.NP_ACCEPT_INVALID_FRAMES, false); err != nil {
+		return err
+	}
+	// Disallow multiple frames
+	if err := pnd.SetPropertyBool(gonfc.NP_ACCEPT_MULTIPLE_FRAMES, false); err != nil {
+		return err
+	}
 	return pnd.chip.InitiatorInit()
-}
-
-// TODO move to gonfc
-func (pnd *Acr122UsbDevice) InitiatorListPassiveTargets(nm gonfc.Modulation) ([]gonfc.Target, error) {
-
-	ant := make([]gonfc.Target, 0)
-
-	pnd.lastError = nil
-	// Let the reader only try once to find a tag
-	bInfiniteSelect := pnd.InfiniteSelect
-	if err := pnd.SetPropertyBool(gonfc.InfiniteSelect, false); err != nil {
-		return ant, err
-	}
-
-	pbtInitData := prepateInitiatorData(nm)
-
-	var nt gonfc.Target
-	var err error
-	for {
-		nt, err = pnd.InitiatorSelectPassiveTarget(nm, pbtInitData)
-		if err != nil {
-			pnd.logger.Warnf("TODO : handle error InitiatorSelectPassiveTarget: %v", err)
-			break
-		}
-
-		var seen bool
-		for _, t := range ant {
-			if nt == t {
-				seen = true
-				break
-			}
-		}
-		if seen {
-			break
-		}
-
-		if err := pnd.InitiatorDeselectTarget(); err != nil {
-			pnd.logger.Warnf("TODO : handle error InitiatorDeselectTarget: %v", err)
-		}
-		// deselect has no effect on FeliCa, Jewel and Thinfilm cards so we'll stop after one...
-		// ISO/IEC 14443 B' cards are polled at 100% probability so it's not possible to detect correctly two cards at the same time
-		if (nm.Type == gonfc.NMT_FELICA) || (nm.Type == gonfc.NMT_JEWEL) || (nm.Type == gonfc.NMT_BARCODE) ||
-			(nm.Type == gonfc.NMT_ISO14443BI) || (nm.Type == gonfc.NMT_ISO14443B2SR) || (nm.Type == gonfc.NMT_ISO14443B2CT) {
-			break
-		}
-	}
-
-	if bInfiniteSelect {
-		if err := pnd.SetPropertyBool(gonfc.InfiniteSelect, true); err != nil {
-			return ant, err
-		}
-	}
-
-	return ant, nil
 }
 
 // TODO move to gonfc
@@ -88,39 +66,6 @@ func prepateInitiatorData(nm gonfc.Modulation) []byte {
 		return nil
 	}
 	panic("unknown modulation")
-}
-
-func (pnd *Acr122UsbDevice) InitiatorSelectPassiveTarget(nm gonfc.Modulation, initData []byte) (gonfc.Target, error) {
-	szInitData := len(initData)
-
-	var abtInit []byte
-	maxAbt := max(12, szInitData)
-	abtTmpInit := make([]byte, maxAbt)
-	szInit := 0
-
-	if err := pnd.DeviceValidateModulation(gonfc.N_INITIATOR, nm); err != nil {
-		return nil, err
-	}
-
-	if szInitData == 0 {
-		// Provide default values, if any
-		initData = prepateInitiatorData(nm)
-	} else if nm.Type == gonfc.NMT_ISO14443A {
-		abtInit = abtTmpInit
-		szInit = gonfc.ISO14443CascadeUID(initData, abtInit)
-	} else {
-		abtInit = abtTmpInit
-		// memcpy(abtInit, pbtInitData, szInitData);
-		for i := 0; i < szInitData; i++ {
-			abtInit[i] = initData[i]
-		}
-		szInit = szInitData
-	}
-
-	//HAL(initiator_select_passive_target
-	nt, err := pnd.chip.InitiatorSelectPassiveTarget(nm, abtInit[:szInit])
-
-	return nt, err
 }
 
 func (pnd *Acr122UsbDevice) DeviceValidateModulation(mode gonfc.Mode, nm gonfc.Modulation) error {

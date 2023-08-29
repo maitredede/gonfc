@@ -31,6 +31,7 @@ type Device interface {
 }
 
 type NFCDeviceCommon struct {
+	LastError      error
 	InfiniteSelect bool
 	Par            bool
 	EasyFraming    bool

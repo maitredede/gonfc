@@ -1,10 +1,8 @@
 package acr122usb
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/google/gousb"
+	"github.com/maitredede/gonfc/utils"
 )
 
 func (pnd *Acr122UsbDevice) usbGetEndPoints() error {
@@ -52,23 +50,12 @@ func (pnd *Acr122UsbDevice) usbBulkRead(data []byte, timeout int) (int, error) {
 	// return n, nil
 	n, err := pnd.epInStream.Read(data)
 	if err != nil {
-		pnd.logger.Named("rx").Errorf("  usbBulkRead: %v", err)
+		pnd.logger.Errorf("RX error: %v", err)
 	} else {
 		read := data[:n]
-		pnd.logger.Named("rx").Debugf("  usbBulkRead: n=%v d=%v", n, toHexString(read))
+		pnd.logger.Debugf("RX n=%v d=%v", n, utils.ToHexString(read))
 	}
 	return n, err
-}
-
-func toHexString(data []byte) string {
-	if len(data) == 0 {
-		return ""
-	}
-	sb := strings.Builder{}
-	for _, b := range data {
-		sb.WriteString(fmt.Sprintf(" %02x", b))
-	}
-	return sb.String()[1:]
 }
 
 func (pnd *Acr122UsbDevice) usbBulkWrite(data []byte, timeout int) (int, error) {
@@ -77,13 +64,13 @@ func (pnd *Acr122UsbDevice) usbBulkWrite(data []byte, timeout int) (int, error) 
 	// 	return 0, err
 	// }
 	// return n, nil
-	pnd.logger.Named("tx").Debugf("  usbBulkWrite: n=%v d=%v", len(data), toHexString(data))
+	pnd.logger.Debugf("TX n=%v d=%v", len(data), utils.ToHexString(data))
 	n, err := pnd.epOutStream.Write(data)
 	if err != nil {
-		pnd.logger.Named("tx").Errorf("  usbBulkWrite: %v", err)
+		pnd.logger.Errorf("TX error: %v", err)
 	} else {
 		if n != len(data) {
-			pnd.logger.Named("tx").Warnf("  usbBulkWrite: sent %v", n)
+			pnd.logger.Warnf("TX partial sent %v instead of %v", n, len(data))
 		}
 	}
 	return n, err

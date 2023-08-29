@@ -10,6 +10,7 @@ import (
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/acr122"
 	"github.com/maitredede/gonfc/pn53x"
+	"github.com/maitredede/gonfc/utils"
 	"go.uber.org/zap"
 )
 
@@ -47,7 +48,6 @@ type Acr122UsbDevice struct {
 	done            func()
 	name            string
 	timerCorrection int
-	lastError       error
 	abortFlag       bool
 
 	chip *pn53x.Chip
@@ -96,8 +96,8 @@ func (pnd *Acr122UsbDevice) usbGetUsbDeviceName() string {
 
 // usbinit (libnfc.acr122_usb_init)
 func (pnd *Acr122UsbDevice) usbinit() error {
-	pnd.logger.Debugf("usbinit enter")
-	defer pnd.logger.Debugf("usbinit exit")
+	// pnd.logger.Debugf("usbinit enter")
+	// defer pnd.logger.Debugf("usbinit exit")
 
 	abtRxBuf := make([]byte, 255+sizeOfCcidHeader)
 
@@ -115,7 +115,7 @@ func (pnd *Acr122UsbDevice) usbinit() error {
 	//TODO : Bi-Color LED and Buzzer Control
 
 	// Power On ICC
-	pnd.logger.Debugf("  usbinit: power on ICC")
+	// pnd.logger.Debugf("  usbinit: power on ICC")
 	ccidFrame := []byte{PC_to_RDR_IccPowerOn, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00}
 	if _, err := pnd.usbBulkWrite(ccidFrame, 1000); err != nil {
 		return fmt.Errorf("bulk write failed: %w", err)
@@ -125,26 +125,26 @@ func (pnd *Acr122UsbDevice) usbinit() error {
 	}
 
 	//ACR122 PICC Operating Parameters
-	pnd.logger.Debugf("  usbinit: ACR122 PICC Operating Parameters")
+	pnd.logger.Debugf("ACR122 PICC Operating Parameters")
 	if _, err := pnd.usbSendAPDU(0x00, 0x51, 0x00, nil, 0, abtRxBuf); err != nil {
 		return fmt.Errorf("apdu send failed: %w", err)
 	}
 
-	if err := pnd.chip.Init(); err != nil {
-		return fmt.Errorf("pn53x init failed: %w", err)
-	}
-
-	// var err error
-	// for i := 0; i < 3; i++ {
-	// 	err = pnd.chip.Init()
-	// 	if err == nil {
-	// 		break
-	// 	}
-	// 	pnd.logger.Debugf("  usbinit: pn53x init failed: %v", err)
-	// }
-	// if err != nil {
+	// if err := pnd.chip.Init(); err != nil {
 	// 	return fmt.Errorf("pn53x init failed: %w", err)
 	// }
+
+	var err error
+	for i := 0; i < 3; i++ {
+		err = pnd.chip.Init()
+		if err == nil {
+			break
+		}
+		pnd.logger.Debugf("PN532 init failed (attempt %d/3) : %v", i+1, err)
+	}
+	if err != nil {
+		return fmt.Errorf("pn53x init failed: %w", err)
+	}
 	return nil
 }
 
@@ -165,19 +165,19 @@ func (pnd *Acr122UsbDevice) usbSendAPDU(ins byte, p1 byte, p2 byte, data []byte,
 }
 
 func (pnd *Acr122UsbDevice) usbSend(data []byte, timeout int) (int, error) {
-	pnd.logger.Debugf("usbSend enter")
-	defer pnd.logger.Debugf("usbSend exit")
+	// pnd.logger.Debugf("usbSend enter")
+	// defer pnd.logger.Debugf("usbSend exit")
 
-	pnd.logger.Debugf("  build frame tama (data len=%v)", len(data))
+	// pnd.logger.Debugf("  build frame tama (data len=%v)", len(data))
 	frame, err := buildFrameFromTama(data)
 	if err != nil {
-		pnd.lastError = gonfc.NFC_EINVARG
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EINVARG
+		return 0, pnd.LastError
 	}
 	n, err := pnd.usbBulkWrite(frame, timeout)
 	if err != nil {
-		pnd.lastError = err
-		return n, pnd.lastError
+		pnd.LastError = err
+		return n, pnd.LastError
 	}
 	return n, nil
 }
@@ -188,55 +188,55 @@ const (
 )
 
 func (pnd *Acr122UsbDevice) usbReceive(data []byte, timeout int) (int, error) {
-	pnd.logger.Debugf("usbReceive enter")
-	defer pnd.logger.Debugf("usbReceive exit")
-	l := pnd.logger.Named("usbReceive")
+	// pnd.logger.Debugf("usbReceive enter")
+	// defer pnd.logger.Debugf("usbReceive exit")
+	// l := pnd.logger.Named("usbReceive")
 	szDataLen := len(data)
 
 	offset := 0
 
 	abtRxBuf := make([]byte, 255+sizeOfCcidHeader)
-	var usb_timeout int
-	var remaining_time int = timeout
+	var usbTimeout int
+	var remainingTime int = timeout
 read:
-	l.Debugf("  read iteration")
+	// l.Debugf("  read iteration")
 	if timeout == USB_INFINITE_TIMEOUT {
-		usb_timeout = USB_TIMEOUT_PER_PASS
+		usbTimeout = USB_TIMEOUT_PER_PASS
 	} else {
-		remaining_time -= USB_TIMEOUT_PER_PASS
-		if remaining_time <= 0 {
-			pnd.lastError = gonfc.NFC_ETIMEOUT
-			return 0, pnd.lastError
+		remainingTime -= USB_TIMEOUT_PER_PASS
+		if remainingTime <= 0 {
+			pnd.LastError = gonfc.NFC_ETIMEOUT
+			return 0, pnd.LastError
 		} else {
-			usb_timeout = min(remaining_time, USB_TIMEOUT_PER_PASS)
+			usbTimeout = min(remainingTime, USB_TIMEOUT_PER_PASS)
 		}
 	}
 
-	n, err := pnd.usbBulkRead(abtRxBuf, usb_timeout)
-	l.Debugf("  usbBulkRead n=%v err=%v", n, err)
-	attempted_response := RDR_to_PC_DataBlock
+	n, err := pnd.usbBulkRead(abtRxBuf, usbTimeout)
+	// l.Debugf("  usbBulkRead n=%v err=%v", n, err)
+	attemptedResponse := RDR_to_PC_DataBlock
 	if os.IsTimeout(err) {
 		if pnd.abortFlag {
 			pnd.abortFlag = false
 			pnd.usbAck()
-			pnd.lastError = gonfc.NFC_EOPABORTED
-			return 0, pnd.lastError
+			pnd.LastError = gonfc.NFC_EOPABORTED
+			return 0, pnd.LastError
 		} else {
 			goto read
 		}
 	}
 	if err != nil || n < 10 {
-		pnd.logger.Debugf("  s=%v d=%v", string(abtRxBuf[:n]), toHexString(abtRxBuf[:n]))
+		pnd.logger.Debugf("  s=%v d=%v", string(abtRxBuf[:n]), utils.ToHexString(abtRxBuf[:n]))
 		pnd.logger.Errorf("invalid RDR_to_PC_DataBlock frame n=%v err=%v", n, err)
 		// try to interrupt current device state
 		pnd.usbAck()
-		pnd.lastError = gonfc.BuildNFC_EIO(err)
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.BuildNFC_EIO(err)
+		return 0, pnd.LastError
 	}
-	if abtRxBuf[offset] != attempted_response {
+	if abtRxBuf[offset] != attemptedResponse {
 		pnd.logger.Errorf("Frame header mismatch")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	offset++
 	iLen := int(abtRxBuf[offset])
@@ -250,8 +250,8 @@ read:
 		// and bmICCStatus=1.
 		pnd.logger.Debugf("command timed out")
 		// log_put(LOG_GROUP, LOG_CATEGORY, NFC_LOG_PRIORITY_DEBUG, "%s", "Command timed out")
-		// pnd.lastError = gonfc.NFC_ETIMEOUT
-		// return 0, pnd.lastError
+		// pnd.LastError = gonfc.NFC_ETIMEOUT
+		// return 0, pnd.LastError
 		goto read
 	}
 
@@ -260,8 +260,8 @@ read:
 	if !(iLen > 1 && rxB10 == 0xd5) { // In case we didn't get an immediate answer:
 		if iLen != 2 {
 			pnd.logger.Errorf("Wrong reply")
-			pnd.lastError = gonfc.NFC_EIO
-			return 0, pnd.lastError
+			pnd.LastError = gonfc.NFC_EIO
+			return 0, pnd.LastError
 		}
 		if rxB10 != SW1_More_Data_Available {
 			if rxB10 == SW1_Warning_with_NV_changed && rxB11 == PN53x_Specific_Application_Level_Error_Code {
@@ -271,16 +271,16 @@ read:
 			} else {
 				pnd.logger.Errorf("Unexpected Status Word (SW1: %02x SW2: %02x)", rxB10, rxB11)
 			}
-			pnd.lastError = gonfc.NFC_EIO
-			return 0, pnd.lastError
+			pnd.LastError = gonfc.NFC_EIO
+			return 0, pnd.LastError
 		}
 		n, err := pnd.usbSendAPDU(APDU_GetAdditionnalData, 0x00, 0x00, nil, rxB11, abtRxBuf)
 		if os.IsTimeout(err) {
 			if pnd.abortFlag {
 				pnd.abortFlag = false
 				pnd.usbAck()
-				pnd.lastError = gonfc.NFC_EOPABORTED
-				return 0, pnd.lastError
+				pnd.LastError = gonfc.NFC_EOPABORTED
+				return 0, pnd.LastError
 			} else {
 				goto read // FIXME May cause some trouble on Touchatag, right ?
 			}
@@ -288,16 +288,16 @@ read:
 		if err != nil || n < 10 {
 			// try to interrupt current device state
 			pnd.usbAck()
-			pnd.lastError = gonfc.BuildNFC_EIO(err)
-			return 0, pnd.lastError
+			pnd.LastError = gonfc.BuildNFC_EIO(err)
+			return 0, pnd.LastError
 		}
 	}
 
 	offset = 0
-	if abtRxBuf[offset] != attempted_response {
+	if abtRxBuf[offset] != attemptedResponse {
 		pnd.logger.Errorf("Frame header mismatch")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	offset++
 
@@ -306,21 +306,21 @@ read:
 	offset++
 	if (abtRxBuf[offset] != 0x00) && (abtRxBuf[offset+1] != 0x00) && (abtRxBuf[offset+2] != 0x00) {
 		pnd.logger.Errorf("Not implemented: only 1-byte length is supported, please report this bug with a full trace.")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	offset += 3
 
 	if iLen < 4 {
 		pnd.logger.Errorf("Too small reply")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	iLen -= 4 // We skip 2 bytes for PN532 direction byte (D5) and command byte (CMD+1), then 2 bytes for APDU status (90 00).
 	if iLen > szDataLen {
 		pnd.logger.Errorf("Unable to receive data: buffer too small. (szDataLen: %v, len: %v)", szDataLen, iLen)
-		pnd.lastError = gonfc.NFC_EOVFLOW
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EOVFLOW
+		return 0, pnd.LastError
 	}
 
 	// Skip CCID remaining bytes
@@ -331,15 +331,15 @@ read:
 	// TFI + PD0 (CC+1)
 	if abtRxBuf[offset] != 0xD5 {
 		pnd.logger.Errorf("TFI Mismatch")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	offset += 1
 
 	if abtRxBuf[offset] != pnd.chip.LastCommandByte()+1 {
 		pnd.logger.Errorf("Command Code verification failed")
-		pnd.lastError = gonfc.NFC_EIO
-		return 0, pnd.lastError
+		pnd.LastError = gonfc.NFC_EIO
+		return 0, pnd.LastError
 	}
 	offset += 1
 
@@ -369,9 +369,11 @@ func (pnd *Acr122UsbDevice) usbAck() error {
 }
 
 func (pnd *Acr122UsbDevice) SetPropertyBool(property gonfc.Property, value bool) error {
+	pnd.logger.Debugf("  setPropertyBool %v: %v", gonfc.PropertyInfos[property].Name, value)
 	return pnd.chip.SetPropertyBool(property, value)
 }
 
 func (pnd *Acr122UsbDevice) SetPropertyInt(property gonfc.Property, value int) error {
+	pnd.logger.Debugf("  setPropertyInt %v: %v", gonfc.PropertyInfos[property].Name, value)
 	return pnd.chip.SetPropertyInt(property, value)
 }

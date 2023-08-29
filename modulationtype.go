@@ -28,3 +28,23 @@ const (
 	Barcode         = NMT_BARCODE
 	ISO14443biClass = NMT_ISO14443BICLASS
 )
+
+var strModulationTypeData map[ModulationType]string = map[ModulationType]string{
+	NMT_ISO14443A:       "ISO/IEC 14443A",
+	NMT_ISO14443B:       "ISO/IEC 14443-4B",
+	NMT_ISO14443BI:      "ISO/IEC 14443-4B",
+	NMT_ISO14443BICLASS: "ISO/IEC 14443-2B-3B iClass (Picopass)",
+	NMT_ISO14443B2CT:    "ISO/IEC 14443-2B ASK CTx",
+	NMT_ISO14443B2SR:    "ISO/IEC 14443-2B ST SRx",
+	NMT_FELICA:          "FeliCa",
+	NMT_JEWEL:           "Innovision Jewel",
+	NMT_BARCODE:         "Thinfilm NFC Barcode",
+	NMT_DEP:             "D.E.P.",
+}
+
+func StrModulationType(nmt ModulationType) string {
+	if s, ok := strModulationTypeData[nmt]; ok {
+		return s
+	}
+	return "???"
+}

@@ -92,8 +92,8 @@ func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 		func(b bool) { dev.InfiniteSelect = b },
 	)
 	lastError := compat.NewErrorFieldGetSet(
-		func() error { return dev.lastError },
-		func(b error) { dev.lastError = b },
+		func() error { return dev.LastError },
+		func(b error) { dev.LastError = b },
 	)
 	bPar := compat.NewBoolFieldGetSet(
 		func() bool { return dev.Par },

@@ -12,22 +12,20 @@ func (pnd *Chip) cmdTrace(cmd byte) {
 	pnd.logger.Debugf("  cmd:%s", info.name)
 }
 
-func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error) {
-	pnd.logger.Debugf("transceive enter")
-	defer pnd.logger.Debugf("transceive exit")
-
-	szRxLen := len(pbtRx)
+func (pnd *Chip) transceive(writeData []byte, readData []byte, timeout int) (int, error) {
+	// pnd.logger.Debugf("transceive enter")
+	// defer pnd.logger.Debugf("transceive exit")
 
 	mi := false
 	res := 0
 	if pnd.wbTrigged {
-		pnd.logger.Debugf("triggering writeBackRegister")
+		// pnd.logger.Debugf("triggering writeBackRegister")
 		if err := pnd.writebackRegister(); err != nil {
 			return 0, fmt.Errorf("writebackRegister: %w", err)
 		}
 	}
 
-	pnd.cmdTrace(pbtTx[0])
+	pnd.cmdTrace(writeData[0])
 	if timeout > 0 {
 		pnd.logger.Debugf("Timeout value: %d", timeout)
 	} else if timeout == 0 {
@@ -41,20 +39,18 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 	abtRx := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 	szRx := len(abtRx)
 
-	// Check if receiving buffers are available, if not, replace them
-	if szRxLen == 0 /* || !pbtRx*/ {
-		pbtRx = abtRx
-	} else {
-		szRx = szRxLen
+	// Ensure a minimal receiving buffers is available
+	if len(readData) == 0 {
+		readData = make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 	}
 
 	// Call the send/receice callback functions of the current driver
-	if _, err := pnd.io.Send(pbtTx, timeout); err != nil {
+	if _, err := pnd.io.Send(writeData, timeout); err != nil {
 		return 0, fmt.Errorf("io.send error: %w", err)
 	}
 
 	// Command is sent, we store the command
-	txCmd := Command(pbtTx[0])
+	txCmd := Command(writeData[0])
 	pnd.lastCommand = txCmd
 
 	// Handle power mode for PN532
@@ -63,7 +59,7 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 	}
 
 	var err error
-	if res, err = pnd.io.Receive(pbtRx, timeout); err != nil {
+	if res, err = pnd.io.Receive(readData, timeout); err != nil {
 		return 0, fmt.Errorf("io.receive error: %w", err)
 	}
 
@@ -99,18 +95,18 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 	case TgSetGeneralBytes:
 		fallthrough
 	case TgSetMetaData:
-		if (pbtRx[0] & 0x80) != 0x00 {
+		if (readData[0] & 0x80) != 0x00 {
 			// NAD detected
 			//abort()
 			panic(errors.New("NAD detected"))
 		}
 		//      if (pbtRx[0] & 0x40) { abort(); } // MI detected
-		mi = (pbtRx[0] & 0x40) != 0x00
-		pnd.lastStatusByte = pbtRx[0] & 0x3f
+		mi = (readData[0] & 0x40) != 0x00
+		pnd.lastStatusByte = readData[0] & 0x3f
 		break
 	case Diagnose:
-		if pbtTx[1] == 0x06 { // Diagnose: Card presence detection
-			pnd.lastStatusByte = pbtRx[0] & 0x3f
+		if writeData[1] == 0x06 { // Diagnose: Card presence detection
+			pnd.lastStatusByte = readData[0] & 0x3f
 		} else {
 			pnd.lastStatusByte = 0
 		}
@@ -124,14 +120,14 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 			pnd.lastStatusByte = 0
 			break
 		}
-		pnd.lastStatusByte = pbtRx[0] & 0x3f
+		pnd.lastStatusByte = readData[0] & 0x3f
 		break
 	case ReadRegister:
 		fallthrough
 	case WriteRegister:
 		if pnd.chipType == PN533 {
 			// PN533 prepends its answer by the status byte
-			pnd.lastStatusByte = pbtRx[0] & 0x3f
+			pnd.lastStatusByte = readData[0] & 0x3f
 		} else {
 			pnd.lastStatusByte = 0
 		}
@@ -145,7 +141,7 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 		var err2 error
 		abtRx2 := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 		// Send empty command to card
-		if res2, err2 = pnd.io.Send(pbtTx, timeout); err2 != nil {
+		if /*res2*/ _, err2 = pnd.io.Send(writeData[:2], timeout); err2 != nil {
 			return 0, err2
 		}
 		if res2, err2 = pnd.io.Receive(abtRx2, timeout); err2 != nil {
@@ -158,10 +154,10 @@ func (pnd *Chip) transceive(pbtTx []byte, pbtRx []byte, timeout int) (int, error
 		}
 		//memcpy(pbtRx+res, abtRx2+1, res2-1)
 		for x := 0; x < res2; x++ {
-			pbtRx[res+x] = abtRx2[1+x]
+			readData[res+x] = abtRx2[1+x]
 		}
 		// Copy last status byte
-		pbtRx[0] = abtRx2[0]
+		readData[0] = abtRx2[0]
 		res += res2 - 1
 	}
 

@@ -1,0 +1,311 @@
+debug	libnfc.config	key: [log_level], value: [3]
+debug	libnfc.config	Unable to open directory: /usr/local/etc/nfc/devices.d
+unknown	libnfc.general	log_level is set to 3
+debug	libnfc.general	allow_autoscan is set to true
+debug	libnfc.general	allow_intrusive_scan is set to false
+debug	libnfc.general	0 device(s) defined by user
+debug	libnfc.driver.acr122_usb	device found: Bus 003 Device 034 Name ACS ACR122
+debug	libnfc.general	1 device(s) found using acr122_usb driver
+debug	libnfc.general	0 device(s) found using pn53x_usb driver
+debug	libnfc.driver.acr122_usb	3 element(s) have been decoded from "acr122_usb:003:034"
+debug	libnfc.driver.acr122_usb	TX: 62 00 00 00 00 00 00 01 00 00 
+debug	libnfc.driver.acr122_usb	RX: 80 02 00 00 00 00 00 00 81 00 3b 00 
+debug	libnfc.driver.acr122_usb	ACR122 PICC Operating Parameters
+debug	libnfc.driver.acr122_usb	TX: 6f 05 00 00 00 00 00 00 00 00 ff 00 51 00 00 
+debug	libnfc.driver.acr122_usb	RX: 80 02 00 00 00 00 00 00 81 00 90 00 
+debug	libnfc.chip.pn53x	GetFirmwareVersion
+debug	libnfc.driver.acr122_usb	TX: 6f 07 00 00 00 00 00 00 00 00 ff 00 00 00 02 d4 02 
+debug	libnfc.driver.acr122_usb	RX: 80 08 00 00 00 00 00 00 81 00 d5 03 32 01 06 07 90 00 
+debug	libnfc.chip.pn53x	SetParameters
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 12 14 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 13 90 00 
+debug	libnfc.general	"ACS / ACR122U PICC Interface" (acr122_usb:003:034) has been claimed.
+debug	libnfc.general	set_property_bool NP_ACTIVATE_FIELD False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 11 00 00 00 00 00 00 00 00 ff 00 00 00 0c d4 06 63 02 63 03 63 0d 63 38 63 3d 
+debug	libnfc.driver.acr122_usb	RX: 80 09 00 00 00 00 00 00 81 00 d5 07 00 00 10 00 07 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_TxMode (Defines the transmission data rate and framing during transmission)
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_RxMode (Defines the transmission data rate and framing during receiving)
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_ManualRCV (Allows manual fine tuning of the internal receiver)
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_BitFraming (Adjustments for bit oriented frames)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 13 00 00 00 00 00 00 00 00 ff 00 00 00 0e d4 08 63 02 80 63 03 80 63 0d 00 63 3d 00 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_ACTIVATE_FIELD True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 01 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_AUTO_ISO14443_4 True
+debug	libnfc.general	set_property_bool NP_FORCE_ISO14443_A True
+debug	libnfc.general	set_property_bool NP_FORCE_SPEED_106 True
+debug	libnfc.general	set_property_bool NP_ACCEPT_INVALID_FRAMES False
+debug	libnfc.general	set_property_bool NP_ACCEPT_MULTIPLE_FRAMES False
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 13 00 00 00 00 00 00 00 00 ff 00 00 00 0e d4 06 63 02 63 03 63 05 63 38 63 3c 63 3d 
+debug	libnfc.driver.acr122_usb	RX: 80 0a 00 00 00 00 00 00 81 00 d5 07 80 80 40 00 12 00 90 00 
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 4a 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 0e 00 00 00 00 00 00 81 00 d5 4b 01 01 00 04 88 04 a1 29 40 35 90 00 
+debug	libnfc.chip.pn53x	InDeselect
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 44 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 45 00 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 4a 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 4b 00 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 0e 00 00 00 00 00 00 00 00 ff 00 00 00 09 d4 4a 01 01 00 ff ff 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 4b 00 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 0e 00 00 00 00 00 00 00 00 ff 00 00 00 09 d4 4a 01 02 00 ff ff 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 4b 00 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 4a 01 03 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 4b 00 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_FORCE_ISO14443_B True
+debug	libnfc.general	set_property_bool NP_FORCE_SPEED_106 True
+debug	libnfc.general	set_property_bool NP_HANDLE_CRC True
+debug	libnfc.general	set_property_bool NP_EASY_FRAMING False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 06 63 02 63 03 
+debug	libnfc.driver.acr122_usb	RX: 80 06 00 00 00 00 00 00 81 00 d5 07 83 83 90 00 
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 42 01 0b 3f 80 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 43 01 90 00 
+debug	libnfc.chip.pn53x	Chip error: "Timeout" (01), returned error: "RF Transmission Error" (-20))
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_FORCE_ISO14443_B True
+debug	libnfc.general	set_property_bool NP_FORCE_SPEED_106 True
+debug	libnfc.general	set_property_bool NP_HANDLE_CRC True
+debug	libnfc.general	set_property_bool NP_EASY_FRAMING False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 06 63 02 63 03 
+debug	libnfc.driver.acr122_usb	RX: 80 06 00 00 00 00 00 00 81 00 d5 07 83 83 90 00 
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 42 06 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 43 01 90 00 
+debug	libnfc.chip.pn53x	Chip error: "Timeout" (01), returned error: "RF Transmission Error" (-20))
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_FORCE_ISO14443_B True
+debug	libnfc.general	set_property_bool NP_FORCE_SPEED_106 True
+debug	libnfc.general	set_property_bool NP_HANDLE_CRC True
+debug	libnfc.general	set_property_bool NP_EASY_FRAMING False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 06 63 02 63 03 
+debug	libnfc.driver.acr122_usb	RX: 80 06 00 00 00 00 00 00 81 00 d5 07 83 83 90 00 
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 42 10 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 43 01 90 00 
+debug	libnfc.chip.pn53x	Chip error: "Timeout" (01), returned error: "RF Transmission Error" (-20))
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_FORCE_ISO14443_B True
+debug	libnfc.general	set_property_bool NP_FORCE_SPEED_106 True
+debug	libnfc.general	set_property_bool NP_HANDLE_CRC True
+debug	libnfc.general	set_property_bool NP_EASY_FRAMING False
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_TxMode (Defines the transmission data rate and framing during transmission)
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 06 63 02 63 03 
+debug	libnfc.driver.acr122_usb	RX: 80 06 00 00 00 00 00 00 81 00 d5 07 83 83 90 00 
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 02 03 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_RxMode (Defines the transmission data rate and framing during receiving)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 03 0b 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_ManualRCV (Allows manual fine tuning of the internal receiver)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 0d 10 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_RFCfg (Configures the receiver gain and RF level)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 16 70 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_GsNOFF (Selects the conductance of the antenna driver pins TX1 and TX2 for load modulation when own RF field is switched OFF)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 13 88 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_GsNOn (Selects the conductance of the antenna driver pins TX1 and TX2 for modulation, when own RF field is switched ON)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 17 f8 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_CWGsP (Selects the conductance of the antenna driver pins TX1 and TX2 when not in modulation phase)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 18 3f 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_ModGsP (Selects the conductance of the antenna driver pins TX1 and TX2 when in modulation phase)
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 19 10 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_TReloadVal_hi (Describes the 16-bit long timer reload value (Higher 8 bits))
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 1c 69 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_TReloadVal_lo (Describes the 16-bit long timer reload value (Lower 8 bits))
+debug	libnfc.chip.pn53x	WriteRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0a 00 00 00 00 00 00 00 00 ff 00 00 00 05 d4 08 63 1d f0 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 09 90 00 
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 42 0a 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 43 01 90 00 
+debug	libnfc.chip.pn53x	Chip error: "Timeout" (01), returned error: "RF Transmission Error" (-20))
+debug	libnfc.chip.pn53x	got expected timeout on iClass activate all
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 42 0c 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 43 01 90 00 
+debug	libnfc.chip.pn53x	Chip error: "Timeout" (01), returned error: "RF Transmission Error" (-20))
+debug	libnfc.chip.pn53x	timeout on iClass anticol
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.chip.pn53x	InListPassiveTarget
+debug	libnfc.chip.pn53x	Timeout value: 300
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 4a 01 04 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 4b 00 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_ACTIVATE_FIELD False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.general	set_property_bool NP_HANDLE_CRC False
+debug	libnfc.general	set_property_bool NP_HANDLE_PARITY False
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 0d 00 00 00 00 00 00 00 00 ff 00 00 00 08 d4 06 63 02 63 03 63 0d 
+debug	libnfc.driver.acr122_usb	RX: 80 07 00 00 00 00 00 00 81 00 d5 07 00 00 10 90 00 
+debug	libnfc.chip.pn53x	InCommunicateThru
+debug	libnfc.driver.acr122_usb	TX: 6f 07 00 00 00 00 00 00 00 00 ff 00 00 00 02 d4 42 
+debug	libnfc.driver.acr122_usb	RX: 80 08 00 00 00 00 00 00 81 00 d5 43 00 04 00 02 90 00 
+debug	libnfc.chip.pn53x	PN53X_REG_CIU_Control (Contains miscellaneous control bits)
+debug	libnfc.chip.pn53x	ReadRegister
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 06 63 3c 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 07 12 90 00 
+debug	libnfc.general	set_property_bool NP_INFINITE_SELECT True
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+debug	libnfc.driver.acr122_usb	ACR122 Abort
+debug	libnfc.driver.acr122_usb	TX: 6f 07 00 00 00 00 00 00 00 00 ff 00 00 00 02 d4 02 
+debug	libnfc.driver.acr122_usb	RX: 80 08 00 00 00 00 00 00 81 00 d5 03 32 01 06 07 90 00 
+debug	libnfc.chip.pn53x	InRelease
+debug	libnfc.driver.acr122_usb	TX: 6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 52 00 
+debug	libnfc.driver.acr122_usb	RX: 80 05 00 00 00 00 00 00 81 00 d5 53 00 90 00 
+debug	libnfc.general	set_property_bool NP_ACTIVATE_FIELD False
+debug	libnfc.chip.pn53x	RFConfiguration
+debug	libnfc.driver.acr122_usb	TX: 6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 00 
+debug	libnfc.driver.acr122_usb	RX: 80 04 00 00 00 00 00 00 81 00 d5 33 90 00 
+/home/damien/projets/github.com/nfc-tools/libnfc/utils/.libs/nfc-list uses libnfc libnfc-1.8.0
+=== device opened ===
+NFC device: ACS / ACR122U PICC Interface opened
+=== nfc_initiator_init ok ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: select_before_HAL ===
+1 ISO14443A passive target(s) found:
+ISO/IEC 14443A (106 kbps) target:
+    ATQA (SENS_RES): 00  04  
+       UID (NFCID1): a1  29  40  35  
+      SAK (SEL_RES): 88  
+
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===
+=== psv: NP_INFINITE_SELECT ok ===
+=== psv: select_before_HAL ===

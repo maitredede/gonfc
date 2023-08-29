@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/maitredede/gonfc/acr122"
+	"github.com/maitredede/gonfc/utils"
 )
 
 // See ACR122 manual: "Bi-Color LED and Buzzer Control" section
@@ -58,7 +59,7 @@ func (pnd *Acr122UsbDevice) ledBuzz(p2 byte, blink [4]byte) (acr122.LedState, er
 		return state, fmt.Errorf("the operation failed")
 	}
 
-	pnd.logger.Warnf("  LED state unknown response: h=%+v d=%v", head, toHexString(content))
+	pnd.logger.Warnf("  LED state unknown response: h=%+v d=%v", head, utils.ToHexString(content))
 	return state, fmt.Errorf("the operation failed")
 }
 

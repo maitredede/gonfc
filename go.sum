@@ -4,8 +4,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/gousb v1.1.2 h1:1BwarNB3inFTFhPgUEfah4hwOPuDz/49I0uX8XNginU=
 github.com/google/gousb v1.1.2/go.mod h1:GGWUkK0gAXDzxhwrzetW592aOmkkqSGcj5KLEgmCVUg=
-github.com/maitredede/go-pigpiod v0.0.0-20230825065835-9eecbfbb299f h1:rDdicm88SpTo4kPBYoYTsb3VUPmrzD1/sZOBdgxY5lY=
-github.com/maitredede/go-pigpiod v0.0.0-20230825065835-9eecbfbb299f/go.mod h1:pxqWnMJ/gcR3RHBvXrAN9caSd6xN00yRxEWPd86hDl4=
+github.com/maitredede/go-pigpiod v0.0.0-20230827221955-50438dcce722 h1:GV/x1iyEIlbygbMbIMqh72lXtYMrnwhZ/unl1oVioQk=
+github.com/maitredede/go-pigpiod v0.0.0-20230827221955-50438dcce722/go.mod h1:pxqWnMJ/gcR3RHBvXrAN9caSd6xN00yRxEWPd86hDl4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=

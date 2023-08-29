@@ -175,7 +175,7 @@ func (pnd *Chip) LastCommandByte() byte {
 }
 
 func (pnd *Chip) Init() error {
-	pnd.logger.Debug("Init")
+	// pnd.logger.Debug("Init")
 	if err := pnd.decodeFirmwareVersion(); err != nil {
 		return err
 	}
@@ -221,8 +221,8 @@ func (pnd *Chip) Init() error {
 }
 
 func (pnd *Chip) decodeFirmwareVersion() error {
-	pnd.logger.Debug("decodeFirmwareVersion enter")
-	defer pnd.logger.Debug("decodeFirmwareVersion exit")
+	// pnd.logger.Debug("decodeFirmwareVersion enter")
+	// defer pnd.logger.Debug("decodeFirmwareVersion exit")
 
 	abtCmd := []byte{byte(GetFirmwareVersion)}
 	abtFw := make([]byte, 4)
@@ -282,7 +282,7 @@ func (pnd *Chip) SetParameters(value Param) error {
 }
 
 func (pnd *Chip) SetPropertyInt(property gonfc.Property, value int) error {
-	pnd.logger.Debugf("  setPropertyInt %v: %v", gonfc.PropertyInfos[property].Name, value)
+	// pnd.logger.Debugf("  setPropertyInt %v: %v", gonfc.PropertyInfos[property].Name, value)
 	switch property {
 	case gonfc.NP_TIMEOUT_COMMAND:
 		pnd.timeoutCommand = value
@@ -323,7 +323,7 @@ func (pnd *Chip) SetPropertyInt(property gonfc.Property, value int) error {
 }
 
 func (pnd *Chip) SetPropertyBool(property gonfc.Property, value bool) error {
-	pnd.logger.Debugf("  setPropertyBool %v: %v", gonfc.PropertyInfos[property].Name, value)
+	// pnd.logger.Debugf("  setPropertyBool %v: %v", gonfc.PropertyInfos[property].Name, value)
 	switch property {
 	case gonfc.NP_HANDLE_CRC:
 		if pnd.bCrc == value {
@@ -337,7 +337,7 @@ func (pnd *Chip) SetPropertyBool(property gonfc.Property, value bool) error {
 		if err := pnd.writeRegisterMask(PN53X_REG_CIU_TxMode, SYMBOL_TX_CRC_ENABLE, btValue); err != nil {
 			return err
 		}
-		if err := pnd.writeRegisterMask(PN53X_REG_CIU_TxMode, SYMBOL_RX_CRC_ENABLE, btValue); err != nil {
+		if err := pnd.writeRegisterMask(PN53X_REG_CIU_RxMode, SYMBOL_RX_CRC_ENABLE, btValue); err != nil {
 			return err
 		}
 		pnd.bCrc = value
@@ -347,8 +347,10 @@ func (pnd *Chip) SetPropertyBool(property gonfc.Property, value bool) error {
 		if pnd.bPar.Get() == value {
 			return nil
 		}
-		var btValue byte = 0x00
+		var btValue byte
 		if value {
+			btValue = 0x00
+		} else {
 			btValue = SYMBOL_PARITY_DISABLE
 		}
 		if err := pnd.writeRegisterMask(PN53X_REG_CIU_ManualRCV, SYMBOL_PARITY_DISABLE, btValue); err != nil {
@@ -456,7 +458,7 @@ func (pnd *Chip) SetPropertyBool(property gonfc.Property, value bool) error {
 }
 
 func (pnd *Chip) SetParametersEnable(ui8Parameter Param, bEnable bool) error {
-	pnd.logger.Debugf("SetParametersEnable")
+	// pnd.logger.Debugf("SetParametersEnable")
 	var ui8Value byte
 	if bEnable {
 		ui8Value = byte(pnd.ui8Parameters | byte(ui8Parameter))
@@ -470,7 +472,7 @@ func (pnd *Chip) SetParametersEnable(ui8Parameter Param, bEnable bool) error {
 }
 
 func (pnd *Chip) resetSettings() error {
-	pnd.logger.Debugf("resetSettings")
+	// pnd.logger.Debugf("resetSettings")
 	pnd.ui8TxBits = 0
 	// Reset the ending transmission bits register, it is unknown what the last tranmission used there
 	if err := pnd.writeRegisterMask(PN53X_REG_CIU_BitFraming, SYMBOL_TX_LAST_BITS, 0x00); err != nil {
