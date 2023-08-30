@@ -1,25 +1,27 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/maitredede/gonfc"
-	"github.com/maitredede/gonfc/acr122usb"
+	"github.com/maitredede/gonfc/cmd/common"
 	"go.uber.org/zap"
 )
 
+var logger *zap.SugaredLogger
+
 func main() {
-	log, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
+	flag.Parse()
+
+	log := common.InitLogger(true)
 	defer log.Sync()
 	redir := zap.RedirectStdLog(log)
 	defer redir()
 
 	logger := log.Sugar()
+	logger.Infof("gonfc version of nfc-list")
 
-	drvs := []gonfc.Driver{
-		&acr122usb.Acr122USBDriver{},
-	}
+	drvs := common.RegisterAllDrivers(logger)
 
 	devices := make([]gonfc.DeviceID, 0)
 	for _, d := range drvs {

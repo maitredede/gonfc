@@ -1,34 +1,36 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/maitredede/gonfc"
-	"github.com/maitredede/gonfc/acr122usb"
+	"github.com/maitredede/gonfc/cmd/common"
 	"go.uber.org/zap"
 )
 
 var logger *zap.SugaredLogger
 
 func main() {
-	log, err := zap.NewDevelopment()
-	if err != nil {
-		panic(err)
-	}
+	flag.Parse()
+
+	log := common.InitLogger(true)
 	defer log.Sync()
 	redir := zap.RedirectStdLog(log)
 	defer redir()
 
 	logger = log.Sugar()
+	logger.Infof("gonfc version of nfc-list")
 
-	drvs := []gonfc.Driver{
-		&acr122usb.Acr122USBDriver{},
-	}
+	drvs := common.RegisterAllDrivers(logger)
 
 	devices := make([]gonfc.DeviceID, 0)
 	for _, d := range drvs {
 		dd, err := d.LookupDevices(logger)
 		if err != nil {
+			logger.Warnf("driver %v lookup error: %v", d, err)
 			continue
 		}
+		logger.Infof("driver %v %v found %v devices", d.Manufacturer(), d.Product(), len(dd))
 		devices = append(devices, dd...)
 	}
 
@@ -42,10 +44,9 @@ func mainDev(devID gonfc.DeviceID) {
 	device, err := devID.Open(logger)
 	if err != nil {
 		logger.Warnf("device %v open error: %v", devID, err)
+		return
 	}
 	defer device.Close()
-
-	logger.Debugf("=== device opened ===")
 
 	if err := device.InitiatorInit(); err != nil {
 		logger.Errorf("initiator_init: %w", err)
@@ -53,7 +54,6 @@ func mainDev(devID gonfc.DeviceID) {
 	}
 
 	logger.Infof("NFC Device %v opened", device)
-	logger.Infof("=== nfc_initiator_init ok ===")
 
 	listDev(device, gonfc.NMT_ISO14443A, gonfc.Nbr106)
 }

@@ -12,7 +12,6 @@ func InitiatorListPassiveTargets(pnd Device, nm Modulation) ([]*NfcTarget, error
 	if err := pnd.SetPropertyBool(InfiniteSelect, false); err != nil {
 		return ant, err
 	}
-	pnd.Logger().Debugf("=== psv: NP_INFINITE_SELECT ok ===\n")
 
 	pbtInitData := PrepateInitiatorData(nm)
 
