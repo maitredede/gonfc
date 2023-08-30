@@ -70,15 +70,15 @@ func (d *PN532PiGPIOI2CDevice) InitiatorInit() error {
 }
 
 func (d *PN532PiGPIOI2CDevice) InitiatorSelectPassiveTarget(m gonfc.Modulation, initData []byte) (*gonfc.NfcTarget, error) {
-	panic("TODO: InitiatorSelectPassiveTarget")
+	return d.chip.InitiatorSelectPassiveTarget(m, initData)
 }
 
 func (d *PN532PiGPIOI2CDevice) InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error) {
-	panic("TODO: InitiatorTransceiveBytes")
+	return d.chip.InitiatorTransceiveBytes(tx, rx, timeout)
 }
 
-func (d *PN532PiGPIOI2CDevice) InitiatorDeselectTarget() error {
-	panic("TODO: InitiatorDeselectTarget")
+func (pnd *PN532PiGPIOI2CDevice) InitiatorDeselectTarget() error {
+	return pnd.chip.InitiatorDeselectTarget()
 }
 
 // WakeUp godoc
@@ -182,4 +182,16 @@ func (pnd *PN532PiGPIOI2CDevice) waitRdyFrame(pbtData []byte, timeout time.Durat
 
 func (pnd *PN532PiGPIOI2CDevice) i2cAck() (int, error) {
 	return pnd.i2cWrite(pn53x.AckFrame)
+}
+
+func (pnd *PN532PiGPIOI2CDevice) DeviceGetSupportedModulation(mode gonfc.Mode) ([]gonfc.ModulationType, error) {
+	return pnd.chip.GetSupportedModulation(mode)
+}
+
+func (pnd *PN532PiGPIOI2CDevice) GetSupportedBaudRate(mt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
+	return pnd.chip.GetSupportedBaudRate(gonfc.N_INITIATOR, mt)
+}
+
+func (pnd *PN532PiGPIOI2CDevice) GetSupportedBaudRateTargetMode(mt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
+	return pnd.chip.GetSupportedBaudRate(gonfc.N_TARGET, mt)
 }

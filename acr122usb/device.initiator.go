@@ -42,41 +42,12 @@ func (pnd *Acr122UsbDevice) InitiatorInit() error {
 	return pnd.chip.InitiatorInit()
 }
 
-func (pnd *Acr122UsbDevice) DeviceValidateModulation(mode gonfc.Mode, nm gonfc.Modulation) error {
-
-	nmt, err := pnd.DeviceGetSupportedModulation(mode)
-	if err != nil {
-		return err
-	}
-	for _, i := range nmt {
-		if i != nm.Type {
-			continue
-		}
-		var nbr []gonfc.BaudRate
-		var err error
-		if mode == gonfc.N_INITIATOR {
-			nbr, err = pnd.GetSupportedBaudRate(i)
-			if err != nil {
-				return err
-			}
-		} else {
-			nbr, err = pnd.GetSupportedBaudRateTargetMode(i)
-			if err != nil {
-				return err
-			}
-		}
-		for _, j := range nbr {
-			if j == nm.BaudRate {
-				return nil
-			}
-		}
-		return gonfc.NFC_EINVARG
-	}
-	return gonfc.NFC_EINVARG
-}
-
 func (pnd *Acr122UsbDevice) InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error) {
 	return pnd.chip.InitiatorTransceiveBytes(tx, rx, timeout)
+}
+
+func (d *Acr122UsbDevice) InitiatorSelectPassiveTarget(m gonfc.Modulation, initData []byte) (*gonfc.NfcTarget, error) {
+	return d.chip.InitiatorSelectPassiveTarget(m, initData)
 }
 
 func (pnd *Acr122UsbDevice) InitiatorDeselectTarget() error {

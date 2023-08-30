@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/compat"
 	"go.uber.org/zap"
 )
@@ -71,43 +70,6 @@ const (
 	PN53x_ACK_FRAME__LEN               int = 6
 )
 
-type chipCommon struct {
-	io     IO
-	logger *zap.SugaredLogger
-
-	chipType  ChipType
-	powerMode PowerMode
-
-	firmwareText string
-
-	btSupportByte                     byte
-	supported_modulation_as_initiator []gonfc.ModulationType
-	supported_modulation_as_target    []gonfc.ModulationType
-
-	wbTrigged bool
-	wbMask    []byte
-	wbData    []byte
-
-	timeoutCommand       time.Duration
-	timeoutAtr           time.Duration
-	timeoutCommunication time.Duration
-	operatingMode        OperatingMode
-
-	ui8TxBits     byte
-	ui8Parameters byte
-	bCrc          bool
-	samMode       SamMode
-	bPar          compat.BoolFieldGetSet
-
-	lastCommand    Command
-	lastStatusByte byte
-	lastError      compat.ErrorFieldGetSet
-
-	bEasyFraming    compat.BoolFieldGetSet
-	bInfiniteSelect compat.BoolFieldGetSet
-	bAutoIso14443_4 bool
-}
-
 type Chip struct {
 	chipCommon
 
@@ -173,10 +135,6 @@ func NewChip(io IO, logger *zap.SugaredLogger, bInfiniteSelect compat.BoolFieldG
 	}
 	logger.Debug("NewChip")
 	return chip, nil
-}
-
-func (pnd *chipCommon) LastCommandByte() byte {
-	return byte(pnd.lastCommand)
 }
 
 func pn53x_int_to_timeout(ms int) byte {

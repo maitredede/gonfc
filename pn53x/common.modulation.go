@@ -2,7 +2,7 @@ package pn53x
 
 import "github.com/maitredede/gonfc"
 
-func (pnd *Chip) GetSupportedModulation(mode gonfc.Mode) ([]gonfc.ModulationType, error) {
+func (pnd *chipCommon) GetSupportedModulation(mode gonfc.Mode) ([]gonfc.ModulationType, error) {
 	switch mode {
 	case gonfc.N_TARGET:
 		return pnd.supported_modulation_as_target, nil

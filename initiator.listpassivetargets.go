@@ -1,5 +1,7 @@
 package gonfc
 
+// InitiatorListPassiveTargets List passive or emulated tags
+// nfc.c nfc_initiator_list_passive_targets
 func InitiatorListPassiveTargets(pnd Device, nm Modulation) ([]*NfcTarget, error) {
 
 	ant := make([]*NfcTarget, 0)
@@ -17,7 +19,7 @@ func InitiatorListPassiveTargets(pnd Device, nm Modulation) ([]*NfcTarget, error
 	var nt *NfcTarget
 	var err error
 	for {
-		nt, err = pnd.InitiatorSelectPassiveTarget(nm, pbtInitData)
+		nt, err = InitiatorSelectPassiveTarget(pnd, nm, pbtInitData)
 		if err != nil {
 			pnd.Logger().Warnf("TODO : handle error InitiatorSelectPassiveTarget: %v", err)
 			break

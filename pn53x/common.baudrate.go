@@ -14,7 +14,7 @@ var (
 	supportedBaudRateDep     = []gonfc.BaudRate{gonfc.Nbr424, gonfc.Nbr212, gonfc.Nbr106}
 )
 
-func (pnd *Chip) GetSupportedBaudRate(mode gonfc.Mode, nmt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
+func (pnd *chipCommon) GetSupportedBaudRate(mode gonfc.Mode, nmt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
 	switch nmt {
 	case gonfc.NMT_FELICA:
 		return supportedBaudRateFelica, nil
