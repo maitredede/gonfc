@@ -1,6 +1,10 @@
 package acr122usb
 
-import "github.com/maitredede/gonfc/pn53x"
+import (
+	"time"
+
+	"github.com/maitredede/gonfc/pn53x"
+)
 
 type acr122io struct {
 	dev *Acr122UsbDevice
@@ -8,11 +12,11 @@ type acr122io struct {
 
 var _ pn53x.IO = (*acr122io)(nil)
 
-func (w *acr122io) Send(data []byte, timeout int) (int, error) {
+func (w *acr122io) Send(data []byte, timeout time.Duration) (int, error) {
 	return w.dev.usbSend(data, timeout)
 }
 
-func (w *acr122io) Receive(data []byte, timeout int) (int, error) {
+func (w *acr122io) Receive(data []byte, timeout time.Duration) (int, error) {
 	return w.dev.usbReceive(data, timeout)
 }
 

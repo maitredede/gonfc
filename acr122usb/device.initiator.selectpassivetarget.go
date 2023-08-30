@@ -16,7 +16,7 @@ func (pnd *Acr122UsbDevice) InitiatorSelectPassiveTarget(nm gonfc.Modulation, in
 
 	if szInitData == 0 {
 		// Provide default values, if any
-		initData = prepateInitiatorData(nm)
+		initData = gonfc.PrepateInitiatorData(nm)
 	} else if nm.Type == gonfc.NMT_ISO14443A {
 		abtInit = abtTmpInit
 		szInit = gonfc.ISO14443CascadeUID(initData, abtInit)

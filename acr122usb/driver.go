@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/gousb"
 	"github.com/maitredede/gonfc"
+	"go.uber.org/zap"
 )
 
 var (
@@ -34,7 +35,7 @@ func (Acr122USBDriver) Conflicts(otherDriver gonfc.Driver) bool {
 	return false
 }
 
-func (d *Acr122USBDriver) LookupDevices() ([]gonfc.DeviceID, error) {
+func (d *Acr122USBDriver) LookupDevices(logger *zap.SugaredLogger) ([]gonfc.DeviceID, error) {
 
 	c := usbctx()
 

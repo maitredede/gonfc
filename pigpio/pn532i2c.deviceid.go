@@ -1,10 +1,8 @@
 package pigpio
 
 import (
-	"context"
-	"time"
+	"fmt"
 
-	"github.com/maitredede/go-pigpiod"
 	"github.com/maitredede/gonfc"
 	"go.uber.org/zap"
 )
@@ -20,28 +18,17 @@ func (d *PN532PiGPIOI2CDeviceID) Driver() gonfc.Driver {
 }
 
 func (d *PN532PiGPIOI2CDeviceID) Path() string {
-	return ""
+	return fmt.Sprintf("tcp://%v?bus=%v&addr=%v&flags=%v", d.drv.host, d.drv.i2cBus, d.drv.i2cAddress, d.drv.i2cFlags)
 }
 
 func (d *PN532PiGPIOI2CDeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	c, err := pigpiod.Connect(ctx, d.drv.host)
+	dev, err := d.drv.openDevice(logger)
 	if err != nil {
 		return nil, err
 	}
-
-	h, err := c.I2CO(d.drv.i2cBus, d.drv.i2cAddress, d.drv.i2cFlags)
-	if err != nil {
-		defer c.Close()
+	if err := dev.chip.Init(); err != nil {
+		defer dev.Close()
 		return nil, err
-	}
-
-	dev := &PN532PiGPIOI2CDevice{
-		id:     d,
-		client: c,
-		handle: h,
 	}
 	return dev, nil
 }

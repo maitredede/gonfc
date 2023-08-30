@@ -1,8 +1,12 @@
 package pn53x
 
-import "github.com/maitredede/gonfc"
+import (
+	"time"
 
-func (pnd *Chip) InitiatorTransceiveBytes(pbtTx []byte, pbtRx []byte, timeout int) (int, error) {
+	"github.com/maitredede/gonfc"
+)
+
+func (pnd *Chip) InitiatorTransceiveBytes(pbtTx []byte, pbtRx []byte, timeout time.Duration) (int, error) {
 	var szExtraTxLen int
 	abtCmd := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 	szTx := len(pbtTx)

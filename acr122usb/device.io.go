@@ -1,6 +1,8 @@
 package acr122usb
 
 import (
+	"time"
+
 	"github.com/google/gousb"
 	"github.com/maitredede/gonfc/utils"
 )
@@ -42,7 +44,7 @@ func (pnd *Acr122UsbDevice) usbGetEndPoints() error {
 	return nil
 }
 
-func (pnd *Acr122UsbDevice) usbBulkRead(data []byte, timeout int) (int, error) {
+func (pnd *Acr122UsbDevice) usbBulkRead(data []byte, timeout time.Duration) (int, error) {
 	// n, err := pnd.epIn.Read(data)
 	// if err != nil {
 	// 	return 0, fmt.Errorf("usbBulkRead: %w", err)
@@ -58,7 +60,7 @@ func (pnd *Acr122UsbDevice) usbBulkRead(data []byte, timeout int) (int, error) {
 	return n, err
 }
 
-func (pnd *Acr122UsbDevice) usbBulkWrite(data []byte, timeout int) (int, error) {
+func (pnd *Acr122UsbDevice) usbBulkWrite(data []byte, timeout time.Duration) (int, error) {
 	// n, err := pnd.epOut.Write(data)
 	// if err != nil {
 	// 	return 0, err

@@ -2,12 +2,15 @@ package pigpio
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/maitredede/go-pigpiod"
 	"github.com/maitredede/gonfc"
+	"github.com/maitredede/gonfc/compat"
+	"github.com/maitredede/gonfc/pn53x"
+	"go.uber.org/zap"
 )
 
 type PN532PiGPIOI2CDriver struct {
@@ -47,21 +50,68 @@ func (d *PN532PiGPIOI2CDriver) Conflicts(otherDriver gonfc.Driver) bool {
 	return false
 }
 
-func (d *PN532PiGPIOI2CDriver) LookupDevices() ([]gonfc.DeviceID, error) {
+func (d *PN532PiGPIOI2CDriver) LookupDevices(logger *zap.SugaredLogger) ([]gonfc.DeviceID, error) {
+	dev, err := d.openDevice(logger)
+	if dev != nil {
+		defer dev.Close()
+	}
+	if err != nil {
+		return nil, err
+	}
+	return []gonfc.DeviceID{dev.id}, nil
+}
+
+func (d *PN532PiGPIOI2CDriver) openDevice(logger *zap.SugaredLogger) (*PN532PiGPIOI2CDevice, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	c, err := pigpiod.Connect(ctx, d.host)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("tcp connect error: %w", err)
 	}
-	defer c.Close()
 
 	h, err := c.I2CO(d.i2cBus, d.i2cAddress, d.i2cFlags)
 	if err != nil {
+		defer c.Close()
+		return nil, fmt.Errorf("i2c open error: %w", err)
+	}
+
+	dev := &PN532PiGPIOI2CDevice{
+		id: &PN532PiGPIOI2CDeviceID{
+			drv: d,
+		},
+		NFCDeviceCommon: gonfc.NFCDeviceCommon{},
+		client:          c,
+		handle:          h,
+		logger:          logger,
+	}
+	io := &pn532i2cIO{
+		device: dev,
+	}
+	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.abortFlag }, func(b bool) { dev.abortFlag = b })
+	lastError := compat.NewErrorFieldGetSet(func() error { return dev.LastError }, func(err error) { dev.LastError = err })
+	bInfiniteSelect := compat.NewBoolFieldGetSet(func() bool { return dev.InfiniteSelect }, func(b bool) { dev.InfiniteSelect = b })
+	bPar := compat.NewBoolFieldGetSet(func() bool { return dev.Par }, func(b bool) { dev.Par = b })
+	bEasyFraming := compat.NewBoolFieldGetSet(func() bool { return dev.EasyFraming }, func(b bool) { dev.EasyFraming = b })
+	chip, err := pn53x.NewPN532I2CChip(
+		logger,
+		io,
+		bInfiniteSelect,
+		lastError,
+		bPar,
+		bEasyFraming,
+		abortFlag,
+	)
+	if err != nil {
+		defer dev.Close()
 		return nil, err
 	}
-	defer c.I2CC(h)
+	dev.chip = chip
 
-	return nil, errors.New("TODO")
+	if err := chip.CheckCommunication(); err != nil {
+		defer dev.Close()
+		return nil, err
+	}
+
+	return dev, nil
 }

@@ -1,6 +1,10 @@
 package acr122usb
 
-import "github.com/maitredede/gonfc"
+import (
+	"time"
+
+	"github.com/maitredede/gonfc"
+)
 
 func (pnd *Acr122UsbDevice) InitiatorInit() error {
 	// Drop the field for a while
@@ -38,36 +42,6 @@ func (pnd *Acr122UsbDevice) InitiatorInit() error {
 	return pnd.chip.InitiatorInit()
 }
 
-// TODO move to gonfc
-func prepateInitiatorData(nm gonfc.Modulation) []byte {
-	switch nm.Type {
-	case gonfc.NMT_ISO14443B:
-		// Application Family Identifier (AFI) must equals 0x00 in order to wakeup all ISO14443-B PICCs (see ISO/IEC 14443-3)
-		return []byte{0}
-	case gonfc.NMT_ISO14443BI:
-		// APGEN
-		return []byte{0x01, 0x0b, 0x3f, 0x80}
-	case gonfc.NMT_FELICA:
-		// polling payload must be present (see ISO/IEC 18092 11.2.2.5)
-		return []byte{0x00, 0xff, 0xff, 0x01, 0x00}
-	case gonfc.NMT_ISO14443A:
-		fallthrough
-	case gonfc.NMT_ISO14443B2CT:
-		fallthrough
-	case gonfc.NMT_ISO14443B2SR:
-		fallthrough
-	case gonfc.NMT_ISO14443BICLASS:
-		fallthrough
-	case gonfc.NMT_JEWEL:
-		fallthrough
-	case gonfc.NMT_BARCODE:
-		fallthrough
-	case gonfc.NMT_DEP:
-		return nil
-	}
-	panic("unknown modulation")
-}
-
 func (pnd *Acr122UsbDevice) DeviceValidateModulation(mode gonfc.Mode, nm gonfc.Modulation) error {
 
 	nmt, err := pnd.DeviceGetSupportedModulation(mode)
@@ -101,7 +75,7 @@ func (pnd *Acr122UsbDevice) DeviceValidateModulation(mode gonfc.Mode, nm gonfc.M
 	return gonfc.NFC_EINVARG
 }
 
-func (pnd *Acr122UsbDevice) InitiatorTransceiveBytes(tx, rx []byte, timeout int) (int, error) {
+func (pnd *Acr122UsbDevice) InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error) {
 	return pnd.chip.InitiatorTransceiveBytes(tx, rx, timeout)
 }
 

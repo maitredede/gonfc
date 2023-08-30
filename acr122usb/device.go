@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/google/gousb"
 	"github.com/google/gousb/usbid"
@@ -81,6 +82,17 @@ func (pnd *Acr122UsbDevice) ID() gonfc.DeviceID {
 	return pnd.id
 }
 
+func (d *Acr122UsbDevice) Logger() *zap.SugaredLogger {
+	return d.logger
+}
+
+func (d *Acr122UsbDevice) SetLastError(err error) {
+	d.LastError = err
+}
+func (d *Acr122UsbDevice) GetInfiniteSelect() bool {
+	return d.InfiniteSelect
+}
+
 func (pnd *Acr122UsbDevice) Name() string {
 	return pnd.name
 }
@@ -101,7 +113,7 @@ func (pnd *Acr122UsbDevice) usbinit() error {
 
 	abtRxBuf := make([]byte, 255+sizeOfCcidHeader)
 
-	if err := pnd.chip.SetPropertyInt(gonfc.NP_TIMEOUT_COMMAND, 1000); err != nil {
+	if err := pnd.chip.SetPropertyDuration(gonfc.NP_TIMEOUT_COMMAND, 1*time.Second); err != nil {
 		return fmt.Errorf("set timeout failed: %w", err)
 	}
 
@@ -164,7 +176,7 @@ func (pnd *Acr122UsbDevice) usbSendAPDU(ins byte, p1 byte, p2 byte, data []byte,
 	return n, nil
 }
 
-func (pnd *Acr122UsbDevice) usbSend(data []byte, timeout int) (int, error) {
+func (pnd *Acr122UsbDevice) usbSend(data []byte, timeout time.Duration) (int, error) {
 	// pnd.logger.Debugf("usbSend enter")
 	// defer pnd.logger.Debugf("usbSend exit")
 
@@ -183,11 +195,11 @@ func (pnd *Acr122UsbDevice) usbSend(data []byte, timeout int) (int, error) {
 }
 
 const (
-	USB_TIMEOUT_PER_PASS int = 200
-	USB_INFINITE_TIMEOUT int = 0
+	USB_TIMEOUT_PER_PASS time.Duration = 200 * time.Millisecond
+	USB_INFINITE_TIMEOUT time.Duration = 0
 )
 
-func (pnd *Acr122UsbDevice) usbReceive(data []byte, timeout int) (int, error) {
+func (pnd *Acr122UsbDevice) usbReceive(data []byte, timeout time.Duration) (int, error) {
 	// pnd.logger.Debugf("usbReceive enter")
 	// defer pnd.logger.Debugf("usbReceive exit")
 	// l := pnd.logger.Named("usbReceive")
@@ -196,8 +208,8 @@ func (pnd *Acr122UsbDevice) usbReceive(data []byte, timeout int) (int, error) {
 	offset := 0
 
 	abtRxBuf := make([]byte, 255+sizeOfCcidHeader)
-	var usbTimeout int
-	var remainingTime int = timeout
+	var usbTimeout time.Duration
+	var remainingTime time.Duration = timeout
 read:
 	// l.Debugf("  read iteration")
 	if timeout == USB_INFINITE_TIMEOUT {
@@ -376,4 +388,9 @@ func (pnd *Acr122UsbDevice) SetPropertyBool(property gonfc.Property, value bool)
 func (pnd *Acr122UsbDevice) SetPropertyInt(property gonfc.Property, value int) error {
 	pnd.logger.Debugf("  setPropertyInt %v: %v", gonfc.PropertyInfos[property].Name, value)
 	return pnd.chip.SetPropertyInt(property, value)
+}
+
+func (pnd *Acr122UsbDevice) SetPropertyDuration(property gonfc.Property, value time.Duration) error {
+	pnd.logger.Debugf("  SetPropertyDuration %v: %v", gonfc.PropertyInfos[property].Name, value)
+	return pnd.chip.SetPropertyDuration(property, value)
 }

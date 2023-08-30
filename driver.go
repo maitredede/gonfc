@@ -1,11 +1,15 @@
 package gonfc
 
-import "go.uber.org/zap"
+import (
+	"time"
+
+	"go.uber.org/zap"
+)
 
 type Driver interface {
 	Manufacturer() string
 	Product() string
-	LookupDevices() ([]DeviceID, error)
+	LookupDevices(logger *zap.SugaredLogger) ([]DeviceID, error)
 
 	Conflicts(otherDriver Driver) bool
 }
@@ -22,12 +26,17 @@ type Device interface {
 
 	SetPropertyBool(property Property, value bool) error
 	SetPropertyInt(property Property, value int) error
+	SetPropertyDuration(property Property, value time.Duration) error
 
 	InitiatorInit() error
-	InitiatorListPassiveTargets(m Modulation) ([]*NfcTarget, error)
 	InitiatorSelectPassiveTarget(m Modulation, initData []byte) (*NfcTarget, error)
-	InitiatorTransceiveBytes(tx, rx []byte, timeout int) (int, error)
+	InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error)
 	InitiatorDeselectTarget() error
+
+	//WIP
+	SetLastError(err error)
+	GetInfiniteSelect() bool
+	Logger() *zap.SugaredLogger
 }
 
 type NFCDeviceCommon struct {

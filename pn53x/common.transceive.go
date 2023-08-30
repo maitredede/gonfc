@@ -3,16 +3,17 @@ package pn53x
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/maitredede/gonfc"
 )
 
-func (pnd *Chip) cmdTrace(cmd byte) {
+func (pnd *chipCommon) cmdTrace(cmd byte) {
 	info := pn53xCommands[Command(cmd)]
 	pnd.logger.Debugf("  cmd:%s", info.name)
 }
 
-func (pnd *Chip) transceive(writeData []byte, readData []byte, timeout int) (int, error) {
+func (pnd *chipCommon) transceive(writeData []byte, readData []byte, timeout time.Duration) (int, error) {
 	// pnd.logger.Debugf("transceive enter")
 	// defer pnd.logger.Debugf("transceive exit")
 

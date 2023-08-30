@@ -32,7 +32,7 @@ package acr122usb
 // 	return "acr122"
 // }
 
-// func (d *Acr122USBDriver) LookupDevices() ([]hardware.DeviceID, error) {
+// func (d *Acr122USBDriver) LookupDevices(logger *zap.SugaredLogger) ([]hardware.DeviceID, error) {
 
 // 	c := usbctx()
 

@@ -1,17 +1,21 @@
 package pn53x
 
-import "github.com/maitredede/gonfc"
+import (
+	"time"
 
-type samMode byte
-
-const (
-	samModeNormal      samMode = 0x01
-	samModeVirtualCard samMode = 0x02
-	samModeWiredCard   samMode = 0x03
-	samModeDualCard    samMode = 0x04
+	"github.com/maitredede/gonfc"
 )
 
-func (pnd *Chip) samConfiguration(mode samMode, timeout int) error {
+type SamMode byte
+
+const (
+	SamModeNormal      SamMode = 0x01
+	SamModeVirtualCard SamMode = 0x02
+	SamModeWiredCard   SamMode = 0x03
+	SamModeDualCard    SamMode = 0x04
+)
+
+func (pnd *chipCommon) PN532SAMConfiguration(mode SamMode, timeout time.Duration) error {
 	abtCmd := []byte{byte(SAMConfiguration), byte(mode), 0x00, 0x00}
 	szCmd := len(abtCmd)
 	if pnd.chipType != PN532 {
@@ -19,14 +23,14 @@ func (pnd *Chip) samConfiguration(mode samMode, timeout int) error {
 		return pnd.lastError.Get()
 	}
 	switch mode {
-	case samModeNormal: // Normal mode
+	case SamModeNormal: // Normal mode
 		fallthrough
-	case samModeWiredCard: // Wired card mode
+	case SamModeWiredCard: // Wired card mode
 		szCmd = 2
 		break
-	case samModeVirtualCard: // Virtual card mode
+	case SamModeVirtualCard: // Virtual card mode
 		fallthrough
-	case samModeDualCard: // Dual card mode
+	case SamModeDualCard: // Dual card mode
 		// TODO Implement timeout handling
 		szCmd = 3
 		break

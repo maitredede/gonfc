@@ -25,7 +25,7 @@ func main() {
 
 	devices := make([]gonfc.DeviceID, 0)
 	for _, d := range drvs {
-		dd, err := d.LookupDevices()
+		dd, err := d.LookupDevices(logger)
 		if err != nil {
 			continue
 		}
@@ -60,7 +60,7 @@ func mainDev(devID gonfc.DeviceID) {
 
 func listDev(device gonfc.Device, modulationType gonfc.ModulationType, speed gonfc.BaudRate) {
 	m := gonfc.Modulation{Type: modulationType, BaudRate: speed}
-	targets, err := device.InitiatorListPassiveTargets(m)
+	targets, err := gonfc.InitiatorListPassiveTargets(device, m)
 	if err != nil {
 		logger.Warnf("device %v list error: %v", device.ID(), err)
 		return

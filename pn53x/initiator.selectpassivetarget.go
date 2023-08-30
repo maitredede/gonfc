@@ -1,12 +1,16 @@
 package pn53x
 
-import "github.com/maitredede/gonfc"
+import (
+	"time"
+
+	"github.com/maitredede/gonfc"
+)
 
 func (c *Chip) InitiatorSelectPassiveTarget(nm gonfc.Modulation, pbtInitData []byte) (*gonfc.NfcTarget, error) {
 	return c.InitiatorSelectPassiveTargetExt(nm, pbtInitData, 300)
 }
 
-func (c *Chip) InitiatorSelectPassiveTargetExt(nm gonfc.Modulation, pbtInitData []byte, timeout int) (*gonfc.NfcTarget, error) {
+func (c *Chip) InitiatorSelectPassiveTargetExt(nm gonfc.Modulation, pbtInitData []byte, timeout time.Duration) (*gonfc.NfcTarget, error) {
 	if nm.Type == gonfc.NMT_ISO14443BI || nm.Type == gonfc.NMT_ISO14443B2SR || nm.Type == gonfc.NMT_ISO14443B2CT || nm.Type == gonfc.NMT_ISO14443BICLASS {
 		panic("TODO")
 		// return c.initiatorSelectPassiveTargetExtIso(nm, pbtInitData, timeout)
@@ -18,7 +22,7 @@ func (c *Chip) InitiatorSelectPassiveTargetExt(nm gonfc.Modulation, pbtInitData 
 	}
 }
 
-// func (pnd *Chip) initiatorSelectPassiveTargetExtIso(nm gonfc.Modulation, pbtInitData []byte, timeout int) (gonfc.Target, error) {
+// func (pnd *Chip) initiatorSelectPassiveTargetExtIso(nm gonfc.Modulation, pbtInitData []byte, timeout time.Duration) (gonfc.Target, error) {
 // 	abtTargetsData := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 // 	// szTargetsData := len(abtTargetsData)
 // 	var szTargetsData int
@@ -186,11 +190,11 @@ func (c *Chip) InitiatorSelectPassiveTargetExt(nm gonfc.Modulation, pbtInitData 
 // 	// panic("WIP")
 // }
 
-// func (c *Chip) initiatorSelectPassiveTargetExtBarcode(nm gonfc.Modulation, pbtInitData []byte, timeout int) (gonfc.Target, error) {
+// func (c *Chip) initiatorSelectPassiveTargetExtBarcode(nm gonfc.Modulation, pbtInitData []byte, timeout time.Duration) (gonfc.Target, error) {
 // 	panic("TODO")
 // }
 
-func (pnd *Chip) initiatorSelectPassiveTargetExtOther(nm gonfc.Modulation, pbtInitData []byte, timeout int) (*gonfc.NfcTarget, error) {
+func (pnd *Chip) initiatorSelectPassiveTargetExtOther(nm gonfc.Modulation, pbtInitData []byte, timeout time.Duration) (*gonfc.NfcTarget, error) {
 
 	abtTargetsData := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
 	//size_t  szTargetsData = sizeof(abtTargetsData);
@@ -225,7 +229,7 @@ func (pnd *Chip) initiatorSelectPassiveTargetExtOther(nm gonfc.Modulation, pbtIn
 	return nt, nil
 }
 
-func (pnd *Chip) cmdInListPassiveTarget(pmInitModulation PNModulation, szMaxTargets byte, pbtInitiatorData []byte, pbtTargetsData []byte, timeout int) (int, error) {
+func (pnd *Chip) cmdInListPassiveTarget(pmInitModulation PNModulation, szMaxTargets byte, pbtInitiatorData []byte, pbtTargetsData []byte, timeout time.Duration) (int, error) {
 	szInitiatorData := len(pbtInitiatorData)
 	abtCmd := make([]byte, 15)
 	abtCmd[0] = byte(InListPassiveTarget)

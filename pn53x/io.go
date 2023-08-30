@@ -1,7 +1,9 @@
 package pn53x
 
+import "time"
+
 type IO interface {
-	Send(data []byte, timeout int) (int, error)
-	Receive(data []byte, timeout int) (int, error)
+	Send(data []byte, timeout time.Duration) (int, error)
+	Receive(data []byte, timeout time.Duration) (int, error)
 	MaxPacketSize() int
 }

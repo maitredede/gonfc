@@ -23,7 +23,7 @@ func main() {
 
 	devices := make([]gonfc.DeviceID, 0)
 	for _, d := range drvs {
-		dd, err := d.LookupDevices()
+		dd, err := d.LookupDevices(logger)
 		if err != nil {
 			continue
 		}

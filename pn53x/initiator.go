@@ -1,21 +1,5 @@
 package pn53x
 
-func (pnd *Chip) InitiatorInit() error {
-	if err := pnd.resetSettings(); err != nil {
-		return err
-	}
-	if pnd.samMode != samModeNormal {
-		if err := pnd.samConfiguration(samModeNormal, -1); err != nil {
-			return err
-		}
-	}
-	if err := pnd.writeRegisterMask(PN53X_REG_CIU_Control, SYMBOL_INITIATOR, 0x10); err != nil {
-		return err
-	}
-	pnd.operatingMode = OperatingModeInitiator
-	return nil
-}
-
 func (pnd *Chip) InitiatorDeselectTarget() error {
 	return pnd.InDeselect(0) // 0 mean deselect all selected targets
 }
