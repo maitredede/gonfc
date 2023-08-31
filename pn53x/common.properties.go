@@ -10,7 +10,7 @@ func (pnd *chipCommon) SetPropertyDuration(property gonfc.Property, value time.D
 	switch property {
 	case gonfc.NP_TIMEOUT_COMMAND:
 		pnd.timeoutCommand = value
-		break
+		return nil
 	case gonfc.NP_TIMEOUT_ATR:
 		pnd.timeoutAtr = value
 		return pnd.RFConfiguration__Various_timings(pn53x_duration_to_timeout(pnd.timeoutAtr), pn53x_duration_to_timeout(pnd.timeoutCommunication))
