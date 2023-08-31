@@ -2,6 +2,7 @@ package gonfc
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/maitredede/gonfc/utils"
@@ -199,4 +200,27 @@ func (t *NfcTarget) StringISO14443A(verbose bool) string {
 		sb.WriteString("TODO : Fingerprinting based on MIFARE type Identification Procedure")
 	}
 	return sb.String()
+}
+
+func (me *NfcTarget) Equals(other *NfcTarget) bool {
+	if me == nil || other == nil {
+		return false
+	}
+	if me == other {
+		return true
+	}
+
+	if me.NM.BaudRate != other.NM.BaudRate {
+		return false
+	}
+	if me.NM.Type != other.NM.Type {
+		return false
+	}
+	if me.NTI == nil || other.NTI == nil {
+		return false
+	}
+	if me.NTI.val == nil || other.NTI.val == nil {
+		return false
+	}
+	return reflect.DeepEqual(me.NTI.val, other.NTI.val)
 }

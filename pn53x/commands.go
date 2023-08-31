@@ -113,3 +113,8 @@ var pn53xCommands map[Command]commandInfo = map[Command]commandInfo{
 	TgResponseToInitiator: mkCommand(TgResponseToInitiator, PN531|PN532|PN533, "TgResponseToInitiator"),
 	TgGetTargetStatus:     mkCommand(TgGetTargetStatus, PN531|PN532|PN533, "TgGetTargetStatus"),
 }
+
+func (pnd *Chip) cmdTrace(cmd byte) {
+	info := pn53xCommands[Command(cmd)]
+	pnd.logger.Debugf("  cmd:%s", info.name)
+}

@@ -102,7 +102,7 @@ func (d *pn532i2cIO) Receive(data []byte, timeout time.Duration) (int, error) {
 		d.device.LastError = err
 		return 0, d.device.LastError
 	}
-	if !bytes.Equal(pn53x.PN53X_preamble_and_start, frameBuf[:pn53x.PN53X_PREAMBLE_AND_START_LEN]) {
+	if !bytes.Equal(pn53x.PN53X_PREAMBLE_AND_START, frameBuf[:pn53x.PN53X_PREAMBLE_AND_START_LEN]) {
 		d.device.logger.Error("Frame preamble+start code mismatch")
 		d.device.LastError = gonfc.NFC_EIO
 		return 0, d.device.LastError
@@ -110,7 +110,7 @@ func (d *pn532i2cIO) Receive(data []byte, timeout time.Duration) (int, error) {
 
 	if frameBuf[3] == 0x01 && frameBuf[4] == 0xff {
 		errorCode := frameBuf[5]
-		err := fmt.Errorf("Application level error detected  (%d)", errorCode)
+		err := fmt.Errorf("application level error detected  (%d)", errorCode)
 		d.device.logger.Error(err)
 		d.device.LastError = gonfc.BuildNFC_EIO(err)
 		return 0, d.device.LastError
@@ -144,7 +144,7 @@ func (d *pn532i2cIO) Receive(data []byte, timeout time.Duration) (int, error) {
 	}
 
 	if lg-2 > len(data) {
-		err := fmt.Errorf("Unable to receive data: buffer too small. (szDataLen: %v, len: %v)", len(data), lg)
+		err := fmt.Errorf("unable to receive data: buffer too small. (szDataLen: %v, len: %v)", len(data), lg)
 		d.device.logger.Error(err)
 		d.device.LastError = gonfc.BuildNFC_EIO(err)
 		return 0, d.device.LastError
@@ -161,7 +161,7 @@ func (d *pn532i2cIO) Receive(data []byte, timeout time.Duration) (int, error) {
 	tfiNext := frameBuf[TFI_idx+1]
 	lastCmdNext := d.device.chip.LastCommandByte() + 1
 	if tfiNext != lastCmdNext {
-		err := fmt.Errorf("Command Code verification failed.  (got 0x%02x,  expected 0x%02x)", tfiNext, lastCmdNext)
+		err := fmt.Errorf("command Code verification failed.  (got 0x%02x,  expected 0x%02x)", tfiNext, lastCmdNext)
 		d.device.logger.Error(err)
 		d.device.LastError = gonfc.BuildNFC_EIO(err)
 		return 0, d.device.LastError
@@ -176,14 +176,14 @@ func (d *pn532i2cIO) Receive(data []byte, timeout time.Duration) (int, error) {
 	}
 
 	if btDCS != 0 {
-		err := fmt.Errorf("Data checksum mismatch  (DCS = 0x%02x, btDCS = 0x%02x)", DCS, btDCS)
+		err := fmt.Errorf("data checksum mismatch  (DCS = 0x%02x, btDCS = 0x%02x)", DCS, btDCS)
 		d.device.logger.Error(err)
 		d.device.LastError = gonfc.BuildNFC_EIO(err)
 		return 0, d.device.LastError
 	}
 
 	if frameBuf[TFI_idx+lg+1] != 0x00 {
-		err := fmt.Errorf("Frame postamble mismatch  (got %d)", frameBuf[frameLength-1])
+		err := fmt.Errorf("frame postamble mismatch  (got %d)", frameBuf[frameLength-1])
 		d.device.logger.Error(err)
 		d.device.LastError = gonfc.BuildNFC_EIO(err)
 		return 0, d.device.LastError

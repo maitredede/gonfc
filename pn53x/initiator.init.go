@@ -2,7 +2,7 @@ package pn53x
 
 // InitiatorInit
 // chips/pn53x.c pn53x_initiator_init
-func (pnd *chipCommon) InitiatorInit() error {
+func (pnd *Chip) InitiatorInit() error {
 	if err := pnd.resetSettings(); err != nil {
 		return err
 	}

@@ -15,7 +15,7 @@ const (
 	SamModeDualCard    SamMode = 0x04
 )
 
-func (pnd *chipCommon) PN532SAMConfiguration(mode SamMode, timeout time.Duration) error {
+func (pnd *Chip) PN532SAMConfiguration(mode SamMode, timeout time.Duration) error {
 	abtCmd := []byte{byte(SAMConfiguration), byte(mode), 0x00, 0x00}
 	szCmd := len(abtCmd)
 	if pnd.chipType != PN532 {

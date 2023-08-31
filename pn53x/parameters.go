@@ -13,7 +13,7 @@ const (
 	PARAM_NO_AMBLE     Param = 0x40 /* Only for PN532 */
 )
 
-func (pnd *chipCommon) SetParameters(parameter Param) error {
+func (pnd *Chip) SetParameters(parameter Param) error {
 	// pnd.logger.Debugf("SetParameters")
 	v := byte(parameter)
 	abtCmd := []byte{byte(SetParameters), v}
@@ -24,7 +24,7 @@ func (pnd *chipCommon) SetParameters(parameter Param) error {
 	return nil
 }
 
-func (pnd *chipCommon) SetParametersEnable(ui8Parameter Param, bEnable bool) error {
+func (pnd *Chip) SetParametersEnable(ui8Parameter Param, bEnable bool) error {
 	// pnd.logger.Debugf("SetParametersEnable")
 	var ui8Value byte
 	if bEnable {

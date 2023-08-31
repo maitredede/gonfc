@@ -1,16 +1,18 @@
 package main
 
 import (
-	"flag"
+	goflag "flag"
 
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/cmd/common"
+	flag "github.com/spf13/pflag"
 	"go.uber.org/zap"
 )
 
 var logger *zap.SugaredLogger
 
 func main() {
+	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 	flag.Parse()
 
 	log := common.InitLogger(true)
@@ -19,7 +21,7 @@ func main() {
 	defer redir()
 
 	logger := log.Sugar()
-	logger.Infof("gonfc version of nfc-list")
+	logger.Infof("gonfc version of nfc-scan-device")
 
 	drvs := common.RegisterAllDrivers(logger)
 

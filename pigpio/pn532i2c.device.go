@@ -16,7 +16,7 @@ type PN532PiGPIOI2CDevice struct {
 	handle uint32
 	logger *zap.SugaredLogger
 
-	chip *pn53x.PN532I2CChip
+	chip *pn53x.Chip
 
 	gonfc.NFCDeviceCommon
 
@@ -79,6 +79,14 @@ func (d *PN532PiGPIOI2CDevice) InitiatorTransceiveBytes(tx, rx []byte, timeout t
 
 func (pnd *PN532PiGPIOI2CDevice) InitiatorDeselectTarget() error {
 	return pnd.chip.InitiatorDeselectTarget()
+}
+
+func (pnd *PN532PiGPIOI2CDevice) InitiatorPollTarget(modulations []gonfc.Modulation, pollnr byte, period byte) (*gonfc.NfcTarget, error) {
+	return pnd.chip.InitiatorPollTarget(modulations, byte(pollnr), byte(period))
+}
+
+func (pnd *PN532PiGPIOI2CDevice) InitiatorTargetIsPresent(nt *gonfc.NfcTarget) (bool, error) {
+	return pnd.chip.InitiatorTargetIsPresent(nt)
 }
 
 // WakeUp godoc

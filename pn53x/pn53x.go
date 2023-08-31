@@ -1,11 +1,7 @@
 package pn53x
 
 import (
-	"errors"
 	"time"
-
-	"github.com/maitredede/gonfc/compat"
-	"go.uber.org/zap"
 )
 
 const ( // PN53X_REG_CIU_BitFraming
@@ -69,73 +65,6 @@ const (
 	PN53x_EXTENDED_FRAME__OVERHEAD     int = 11
 	PN53x_ACK_FRAME__LEN               int = 6
 )
-
-type Chip struct {
-	chipCommon
-
-	progressivefield bool
-
-	currentTarget any
-}
-
-func NewChip(io IO, logger *zap.SugaredLogger, bInfiniteSelect compat.BoolFieldGetSet, lastError compat.ErrorFieldGetSet, bPar compat.BoolFieldGetSet, bEasyFraming compat.BoolFieldGetSet) (*Chip, error) {
-	if io == nil {
-		panic(errors.New("io is nil"))
-	}
-	if logger == nil {
-		panic(errors.New("logger is nil"))
-	}
-	chip := &Chip{
-		chipCommon: chipCommon{
-			logger: logger,
-			// Keep I/O functions
-			io: io,
-			// Set type to generic (means unknown)
-			chipType: PN53x,
-			// Set power mode to normal, if your device starts in LowVBat (ie. PN532
-			// UART) the driver layer have to correctly set it.
-			powerMode: PowerModeNormal,
-
-			// WriteBack cache is clean
-			wbTrigged: false,
-			wbMask:    make([]byte, PN53X_CACHE_REGISTER_SIZE),
-			wbData:    make([]byte, PN53X_CACHE_REGISTER_SIZE),
-
-			// Set default command timeout (350 ms)
-			timeoutCommand: 350,
-			// Set default ATR timeout (103 ms)
-			timeoutAtr: 103,
-			// Set default communication timeout (52 ms)
-			timeoutCommunication: 52,
-
-			// Clear last status byte
-			lastStatusByte: 0x00,
-
-			// Set current sam_mode to normal mode
-			samMode: SamModeNormal,
-
-			//driver field accessors
-			lastError:       lastError,
-			bPar:            bPar,
-			bInfiniteSelect: bInfiniteSelect,
-			bEasyFraming:    bEasyFraming,
-
-			supported_modulation_as_initiator: nil,
-			supported_modulation_as_target:    nil,
-
-			// PN53x starts in initiator mode
-			operatingMode: OperatingModeInitiator,
-		},
-
-		// Set current target to NULL
-		currentTarget: nil,
-
-		// Set default progressive field flag
-		progressivefield: false,
-	}
-	logger.Debug("NewChip")
-	return chip, nil
-}
 
 func pn53x_int_to_timeout(ms int) byte {
 	var res byte

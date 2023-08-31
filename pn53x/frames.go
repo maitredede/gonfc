@@ -12,7 +12,7 @@ var (
 	ErrorFrame = []byte{0x00, 0x00, 0xff, 0x01, 0xff, 0x7f, 0x81, 0x00}
 )
 
-func (c *chipCommon) CheckAckFrame(frame []byte) error {
+func (c *Chip) CheckAckFrame(frame []byte) error {
 	if len(frame) >= len(AckFrame) {
 		if bytes.Equal(AckFrame, frame[:len(AckFrame)]) {
 			c.logger.Debug("PN53x ACKed")
@@ -24,7 +24,7 @@ func (c *chipCommon) CheckAckFrame(frame []byte) error {
 	return c.lastError.Get()
 }
 
-func (c *chipCommon) CheckErrorFrame(frame []byte) error {
+func (c *Chip) CheckErrorFrame(frame []byte) error {
 	if len(frame) >= len(ErrorFrame) {
 		if bytes.Equal(ErrorFrame, frame[:len(ErrorFrame)]) {
 			c.logger.Debug("PN53x sent an error frame")

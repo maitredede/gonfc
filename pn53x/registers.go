@@ -2,79 +2,6 @@ package pn53x
 
 import "github.com/maitredede/gonfc"
 
-func (pnd *chipCommon) regTrace(reg Register) {
-	info := pn53xRegisters[reg]
-	pnd.logger.Debugf("%v (%v)", info.name, info.desc)
-}
-
-func (pnd *chipCommon) writebackRegister() error {
-	// TODO Check at each step (ReadRegister, WriteRegister) if we didn't exceed max supported frame length
-	abtReadRegisterCmd := gonfc.BufferInit(PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
-
-	gonfc.BufferAppend(abtReadRegisterCmd, byte(ReadRegister))
-
-	// First step, it looks for registers to be read before applying the requested mask
-	pnd.wbTrigged = false
-	for n := uint16(0); n < uint16(PN53X_CACHE_REGISTER_SIZE); n++ {
-		if (pnd.wbMask[n] != 0x00) && (pnd.wbMask[n] != 0xff) {
-			// This register needs to be read: mask is present but does not cover full data width (ie. mask != 0xff)
-			var pn53xRegisterAddress uint16 = PN53X_CACHE_REGISTER_MIN_ADDRESS + n
-			gonfc.BufferAppend(abtReadRegisterCmd, byte(pn53xRegisterAddress>>8))
-			gonfc.BufferAppend(abtReadRegisterCmd, byte(pn53xRegisterAddress&0xff))
-		}
-	}
-
-	if abtReadRegisterCmd.Len() > 1 {
-		// It needs to read some registers
-		abtRes := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
-		// size_t szRes = sizeof(abtRes);
-		// It transceives the previously constructed ReadRegister command
-		// if ((res = pn53x_transceive(pnd, abtReadRegisterCmd, BUFFER_SIZE(abtReadRegisterCmd), abtRes, szRes, -1)) < 0) {
-		if _, err := pnd.transceive(abtReadRegisterCmd.Bytes(), abtRes, -1); err != nil {
-			return err
-		}
-		i := 0
-		if pnd.chipType == PN533 {
-			// PN533 prepends its answer by a status byte
-			i = 1
-		}
-		for n := 0; n < PN53X_CACHE_REGISTER_SIZE; n++ {
-			if (pnd.wbMask[n] != 0x00) && (pnd.wbMask[n] != 0xff) {
-				pnd.wbData[n] = ((pnd.wbData[n] & pnd.wbMask[n]) | (abtRes[i] & (^pnd.wbMask[n])))
-				if pnd.wbData[n] != abtRes[i] {
-					// Requested value is different from read one
-					pnd.wbMask[n] = 0xff // We can now apply whole data bits
-				} else {
-					pnd.wbMask[n] = 0x00 // We already have the right value
-				}
-				i++
-			}
-		}
-	}
-	// Now, the writeback-cache only has masks with 0xff, we can start to WriteRegister
-	abtWriteRegisterCmd := gonfc.BufferInit(PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
-	gonfc.BufferAppend(abtWriteRegisterCmd, byte(WriteRegister))
-	for n := uint16(0); n < uint16(PN53X_CACHE_REGISTER_SIZE); n++ {
-		if pnd.wbMask[n] == 0xff {
-			var pn53xRegisterAddress uint16 = uint16(PN53X_CACHE_REGISTER_MIN_ADDRESS + n)
-			pnd.regTrace(Register(pn53xRegisterAddress))
-			gonfc.BufferAppend(abtWriteRegisterCmd, byte(pn53xRegisterAddress>>8))
-			gonfc.BufferAppend(abtWriteRegisterCmd, byte(pn53xRegisterAddress&0xff))
-			gonfc.BufferAppend(abtWriteRegisterCmd, pnd.wbData[n])
-			// This register is handled, we reset the mask to prevent
-			pnd.wbMask[n] = 0x00
-		}
-	}
-
-	if abtWriteRegisterCmd.Len() > 1 {
-		// We need to write some registers
-		if _, err := pnd.transceive(abtWriteRegisterCmd.Bytes(), nil, -1); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 const (
 	PN53X_CACHE_REGISTER_MIN_ADDRESS = uint16(PN53X_REG_CIU_Mode)
 	PN53X_CACHE_REGISTER_MAX_ADDRESS = uint16(PN53X_REG_CIU_Coll)
@@ -245,7 +172,80 @@ var pn53xRegisters map[Register]registerInfo = map[Register]registerInfo{
 	PN53X_SFR_P7:     mkRegisterInfo(PN53X_SFR_P7, "PN53X_SFR_P7", "Port 7 value"),
 }
 
-func (pnd *chipCommon) writeRegister(ui16RegisterAddress Register, ui8Value byte) error {
+func (pnd *Chip) regTrace(reg Register) {
+	info := pn53xRegisters[reg]
+	pnd.logger.Debugf("%v (%v)", info.name, info.desc)
+}
+
+func (pnd *Chip) writebackRegister() error {
+	// TODO Check at each step (ReadRegister, WriteRegister) if we didn't exceed max supported frame length
+	abtReadRegisterCmd := gonfc.BufferInit(PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
+
+	gonfc.BufferAppend(abtReadRegisterCmd, byte(ReadRegister))
+
+	// First step, it looks for registers to be read before applying the requested mask
+	pnd.wbTrigged = false
+	for n := uint16(0); n < uint16(PN53X_CACHE_REGISTER_SIZE); n++ {
+		if (pnd.wbMask[n] != 0x00) && (pnd.wbMask[n] != 0xff) {
+			// This register needs to be read: mask is present but does not cover full data width (ie. mask != 0xff)
+			var pn53xRegisterAddress uint16 = PN53X_CACHE_REGISTER_MIN_ADDRESS + n
+			gonfc.BufferAppend(abtReadRegisterCmd, byte(pn53xRegisterAddress>>8))
+			gonfc.BufferAppend(abtReadRegisterCmd, byte(pn53xRegisterAddress&0xff))
+		}
+	}
+
+	if abtReadRegisterCmd.Len() > 1 {
+		// It needs to read some registers
+		abtRes := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
+		// size_t szRes = sizeof(abtRes);
+		// It transceives the previously constructed ReadRegister command
+		// if ((res = pn53x_transceive(pnd, abtReadRegisterCmd, BUFFER_SIZE(abtReadRegisterCmd), abtRes, szRes, -1)) < 0) {
+		if _, err := pnd.transceive(abtReadRegisterCmd.Bytes(), abtRes, -1); err != nil {
+			return err
+		}
+		i := 0
+		if pnd.chipType == PN533 {
+			// PN533 prepends its answer by a status byte
+			i = 1
+		}
+		for n := 0; n < PN53X_CACHE_REGISTER_SIZE; n++ {
+			if (pnd.wbMask[n] != 0x00) && (pnd.wbMask[n] != 0xff) {
+				pnd.wbData[n] = ((pnd.wbData[n] & pnd.wbMask[n]) | (abtRes[i] & (^pnd.wbMask[n])))
+				if pnd.wbData[n] != abtRes[i] {
+					// Requested value is different from read one
+					pnd.wbMask[n] = 0xff // We can now apply whole data bits
+				} else {
+					pnd.wbMask[n] = 0x00 // We already have the right value
+				}
+				i++
+			}
+		}
+	}
+	// Now, the writeback-cache only has masks with 0xff, we can start to WriteRegister
+	abtWriteRegisterCmd := gonfc.BufferInit(PN53x_EXTENDED_FRAME__DATA_MAX_LEN)
+	gonfc.BufferAppend(abtWriteRegisterCmd, byte(WriteRegister))
+	for n := uint16(0); n < uint16(PN53X_CACHE_REGISTER_SIZE); n++ {
+		if pnd.wbMask[n] == 0xff {
+			var pn53xRegisterAddress uint16 = uint16(PN53X_CACHE_REGISTER_MIN_ADDRESS + n)
+			pnd.regTrace(Register(pn53xRegisterAddress))
+			gonfc.BufferAppend(abtWriteRegisterCmd, byte(pn53xRegisterAddress>>8))
+			gonfc.BufferAppend(abtWriteRegisterCmd, byte(pn53xRegisterAddress&0xff))
+			gonfc.BufferAppend(abtWriteRegisterCmd, pnd.wbData[n])
+			// This register is handled, we reset the mask to prevent
+			pnd.wbMask[n] = 0x00
+		}
+	}
+
+	if abtWriteRegisterCmd.Len() > 1 {
+		// We need to write some registers
+		if _, err := pnd.transceive(abtWriteRegisterCmd.Bytes(), nil, -1); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (pnd *Chip) writeRegister(ui16RegisterAddress Register, ui8Value byte) error {
 	abtCmd := []byte{
 		byte(WriteRegister),
 		byte(ui16RegisterAddress >> 8),
@@ -258,7 +258,7 @@ func (pnd *chipCommon) writeRegister(ui16RegisterAddress Register, ui8Value byte
 	return err
 }
 
-func (pnd *chipCommon) writeRegisterMask(ui16RegisterAddress Register, ui8SymbolMask byte, ui8Value byte) error {
+func (pnd *Chip) writeRegisterMask(ui16RegisterAddress Register, ui8SymbolMask byte, ui8Value byte) error {
 	if (uint16(ui16RegisterAddress) < PN53X_CACHE_REGISTER_MIN_ADDRESS) || (uint16(ui16RegisterAddress) > PN53X_CACHE_REGISTER_MAX_ADDRESS) {
 		if ui8SymbolMask == 0xff {
 			return pnd.writeRegister(ui16RegisterAddress, ui8Value)
@@ -282,7 +282,7 @@ func (pnd *chipCommon) writeRegisterMask(ui16RegisterAddress Register, ui8Symbol
 	return nil
 }
 
-func (pnd *chipCommon) readRegister(ui16RegisterAddress Register) (byte, error) {
+func (pnd *Chip) readRegister(ui16RegisterAddress Register) (byte, error) {
 	abtCmd := []byte{
 		byte(ReadRegister),
 		byte(ui16RegisterAddress >> 8),
@@ -303,7 +303,7 @@ func (pnd *chipCommon) readRegister(ui16RegisterAddress Register) (byte, error) 
 	return abtRegValue[0], nil
 }
 
-func (pnd *chipCommon) setTxBits(ui8Bits byte) error {
+func (pnd *Chip) setTxBits(ui8Bits byte) error {
 	// Test if we need to update the transmission bits register setting
 	if pnd.ui8TxBits == ui8Bits {
 		return nil

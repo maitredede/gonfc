@@ -86,23 +86,11 @@ func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 
 	// libnfc.acr122_usb_get_usb_device_name
 	dev.name = dev.usbGetUsbDeviceName()
-
-	bInfiniteSelect := compat.NewBoolFieldGetSet(
-		func() bool { return dev.InfiniteSelect },
-		func(b bool) { dev.InfiniteSelect = b },
-	)
-	lastError := compat.NewErrorFieldGetSet(
-		func() error { return dev.LastError },
-		func(b error) { dev.LastError = b },
-	)
-	bPar := compat.NewBoolFieldGetSet(
-		func() bool { return dev.Par },
-		func(b bool) { dev.Par = b },
-	)
-	bEasyFraming := compat.NewBoolFieldGetSet(
-		func() bool { return dev.EasyFraming },
-		func(b bool) { dev.EasyFraming = b },
-	)
+	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.abortFlag }, func(b bool) { dev.abortFlag = b })
+	bInfiniteSelect := compat.NewBoolFieldGetSet(func() bool { return dev.InfiniteSelect }, func(b bool) { dev.InfiniteSelect = b })
+	lastError := compat.NewErrorFieldGetSet(func() error { return dev.LastError }, func(b error) { dev.LastError = b })
+	bPar := compat.NewBoolFieldGetSet(func() bool { return dev.Par }, func(b bool) { dev.Par = b })
+	bEasyFraming := compat.NewBoolFieldGetSet(func() bool { return dev.EasyFraming }, func(b bool) { dev.EasyFraming = b })
 	chip, err := pn53x.NewChip(
 		dev.io,
 		dev.logger.Named("pn53x"),
@@ -110,6 +98,7 @@ func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 		lastError,
 		bPar,
 		bEasyFraming,
+		abortFlag,
 	)
 	if err != nil {
 		dev.Close()
@@ -123,6 +112,8 @@ func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 		defer dev.Close()
 		return nil, fmt.Errorf("usbinit: %w", err)
 	}
+
+	logger.Infof("blah blah blah has been claimed")
 
 	return dev, nil
 }

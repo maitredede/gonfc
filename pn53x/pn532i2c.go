@@ -2,9 +2,6 @@ package pn53x
 
 import (
 	"time"
-
-	"github.com/maitredede/gonfc/compat"
-	"go.uber.org/zap"
 )
 
 const (
@@ -26,74 +23,6 @@ const (
 
 var (
 	/* preamble and start bytes, see pn532-internal.h for details */
-	PN53X_PREAMBLE_AND_START []byte = []byte{0x00, 0x00, 0xff}
+	PN53X_PREAMBLE_AND_START     []byte = []byte{0x00, 0x00, 0xff}
+	PN53X_PREAMBLE_AND_START_LEN int    = len(PN53X_PREAMBLE_AND_START)
 )
-
-type PN532I2CChip struct {
-	chipCommon
-
-	timerCorrection int
-	abortFlag       compat.BoolFieldGetSet
-}
-
-var (
-	PN53X_preamble_and_start     []byte = []byte{0x00, 0x00, 0xff}
-	PN53X_PREAMBLE_AND_START_LEN int    = len(PN53X_preamble_and_start)
-)
-
-func NewPN532I2CChip(logger *zap.SugaredLogger, io IO, bInfiniteSelect compat.BoolFieldGetSet, lastError compat.ErrorFieldGetSet, bPar compat.BoolFieldGetSet, bEasyFraming compat.BoolFieldGetSet, abortFlag compat.BoolFieldGetSet) (*PN532I2CChip, error) {
-	c := &PN532I2CChip{
-		chipCommon: chipCommon{
-			logger: logger,
-			// Keep I/O functions
-			io: io,
-
-			// SAMConfiguration command if needed to wakeup the chip and pn53x_SAMConfiguration check if the chip is a PN532
-			chipType: PN532,
-			// This device starts in LowVBat mode
-			powerMode: PowerModeLowVBat,
-
-			// WriteBack cache is clean
-			wbTrigged: false,
-			wbMask:    make([]byte, PN53X_CACHE_REGISTER_SIZE),
-			wbData:    make([]byte, PN53X_CACHE_REGISTER_SIZE),
-
-			// Set default command timeout (350 ms)
-			timeoutCommand: 350,
-			// Set default ATR timeout (103 ms)
-			timeoutAtr: 103,
-			// Set default communication timeout (52 ms)
-			timeoutCommunication: 52,
-
-			// Clear last status byte
-			lastStatusByte: 0x00,
-
-			// Set current sam_mode to normal mode
-			samMode: SamModeNormal,
-
-			//driver field accessors
-			lastError:       lastError,
-			bPar:            bPar,
-			bInfiniteSelect: bInfiniteSelect,
-			bEasyFraming:    bEasyFraming,
-
-			supported_modulation_as_initiator: nil,
-			supported_modulation_as_target:    nil,
-
-			// PN53x starts in initiator mode
-			operatingMode: OperatingModeInitiator,
-		},
-		abortFlag: abortFlag,
-	}
-
-	// empirical tuning
-	c.timerCorrection = 48
-
-	//driverData
-	c.abortFlag.Set(false)
-
-	// if err := c.CheckCommunication(); err != nil {
-	// 	return nil, err
-	// }
-	return c, nil
-}

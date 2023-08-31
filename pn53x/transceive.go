@@ -8,12 +8,7 @@ import (
 	"github.com/maitredede/gonfc"
 )
 
-func (pnd *chipCommon) cmdTrace(cmd byte) {
-	info := pn53xCommands[Command(cmd)]
-	pnd.logger.Debugf("  cmd:%s", info.name)
-}
-
-func (pnd *chipCommon) transceive(writeData []byte, readData []byte, timeout time.Duration) (int, error) {
+func (pnd *Chip) transceive(writeData []byte, readData []byte, timeout time.Duration) (int, error) {
 	// pnd.logger.Debugf("transceive enter")
 	// defer pnd.logger.Debugf("transceive exit")
 

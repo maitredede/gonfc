@@ -1,0 +1,66 @@
+2023-08-31T17:10:25+11:00	[34mINFO[0m	nfc-list/main.go:24	gonfc version of nfc-list
+2023-08-31T17:10:25+11:00	[34mINFO[0m	nfc-list/main.go:35	driver libusb acr122 found 1 devices
+2023-08-31T17:10:25+11:00	[34mINFO[0m	nfc-list/main.go:39	found 1 devices
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/new.go:86	NewChip
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=10 d=62 00 00 00 00 00 00 01 00 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=12 d=80 02 00 00 00 00 00 00 81 00 3b 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:140	ACR122 PICC Operating Parameters
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=15 d=6f 05 00 00 00 00 00 00 00 00 ff 00 51 00 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=12 d=80 02 00 00 00 00 00 00 81 00 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:GetFirmwareVersion
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=17 d=6f 07 00 00 00 00 00 00 00 00 ff 00 00 00 02 d4 02
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=18 d=80 08 00 00 00 00 00 00 81 00 d5 03 32 01 06 07 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/decodefirmware.go:55	  firmware: PN532 v1.6
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:SetParameters
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=18 d=6f 08 00 00 00 00 00 00 00 00 ff 00 00 00 03 d4 12 14
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 13 90 00
+2023-08-31T17:10:25+11:00	[34mINFO[0m	acr122usb/deviceid.go:116	blah blah blah has been claimed
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	nfc-list/main.go:53	=============================================
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	nfc-list/main.go:54	=== InitiatorInit
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_ACTIVATE_FIELD: false
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:ReadRegister
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=27 d=6f 11 00 00 00 00 00 00 00 00 ff 00 00 00 0c d4 06 63 02 63 03 63 0d 63 38 63 3d
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=19 d=80 09 00 00 00 00 00 00 81 00 d5 07 00 00 10 00 07 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/registers.go:177	PN53X_REG_CIU_TxMode (Defines the transmission data rate and framing during transmission)
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/registers.go:177	PN53X_REG_CIU_RxMode (Defines the transmission data rate and framing during receiving)
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/registers.go:177	PN53X_REG_CIU_ManualRCV (Allows manual fine tuning of the internal receiver)
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/registers.go:177	PN53X_REG_CIU_BitFraming (Adjustments for bit oriented frames)
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:WriteRegister
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=29 d=6f 13 00 00 00 00 00 00 00 00 ff 00 00 00 0e d4 08 63 02 80 63 03 80 63 0d 00 63 3d 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 09 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:RFConfiguration
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=19 d=6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 33 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_ACTIVATE_FIELD: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:RFConfiguration
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=19 d=6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 32 01 01
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 33 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_INFINITE_SELECT: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:RFConfiguration
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=21 d=6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 33 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_AUTO_ISO14443_4: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_FORCE_ISO14443_A: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_FORCE_SPEED_106: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_ACCEPT_INVALID_FRAMES: false
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_ACCEPT_MULTIPLE_FRAMES: false
+2023-08-31T17:10:25+11:00	[34mINFO[0m	nfc-list/main.go:61	NFC Device &{<nil> 0xc0004bc230 0xc000030040 0xc000056078 130 0xc000590060 0xc000580810 2 0xc000590058 0xc00002e030 64 0xc0004b20a8 0xc0005807e0 0x560ec0 Advanced Card Systems, Ltd / ACR122U 46 false 0xc0004c6140 {<nil> true true true}} opened
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	nfc-list/main.go:67	=============================================
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	nfc-list/main.go:68	=== InitiatorListPassiveTargets
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_INFINITE_SELECT: false
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:ReadRegister
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=29 d=6f 13 00 00 00 00 00 00 00 00 ff 00 00 00 0e d4 06 63 02 63 03 63 05 63 38 63 3c 63 3d
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=20 d=80 0a 00 00 00 00 00 00 81 00 d5 07 80 80 40 00 12 00 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:RFConfiguration
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=21 d=6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 ff ff ff
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=14 d=80 04 00 00 00 00 00 00 81 00 d5 33 90 00
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:InListPassiveTarget
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/transceive.go:26	Timeout value: 300
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=19 d=6f 09 00 00 00 00 00 00 00 00 ff 00 00 00 04 d4 4a 01 00
+2023-08-31T17:10:25+11:00	[33mWARN[0m	gonfc/initiator.listpassivetargets.go:23	TODO : handle error InitiatorSelectPassiveTarget: io.receive error: NFC_ETIMEOUT
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.go:385	  setPropertyBool NP_INFINITE_SELECT: true
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	pn53x	pn53x/commands.go:119	  cmd:RFConfiguration
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:69	TX n=21 d=6f 0b 00 00 00 00 00 00 00 00 ff 00 00 00 06 d4 32 05 00 01 02
+2023-08-31T17:10:25+11:00	[35mDEBUG[0m	acr122usb/device.io.go:58	RX n=24 d=80 0e 00 00 00 00 00 00 81 00 d5 4b 01 01 00 04 88 04 a1 29 40 35 90 00
+2023-08-31T17:10:25+11:00	[31mERROR[0m	acr122usb/device.go:353	Command Code verification failed
+2023-08-31T17:10:25+11:00	[33mWARN[0m	nfc-list/main.go:73	device ACS ACR122 2.17: 072f:2200 (available configs: [1]) list error: io.receive error: 

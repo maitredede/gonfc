@@ -157,11 +157,12 @@ func (pnd *Acr122UsbDevice) usbinit() error {
 	if err != nil {
 		return fmt.Errorf("pn53x init failed: %w", err)
 	}
+
 	return nil
 }
 
 func (pnd *Acr122UsbDevice) usbSendAPDU(ins byte, p1 byte, p2 byte, data []byte, le byte, out []byte) (int, error) {
-	pnd.logger.Debugf("  build frame apdu ins=%02x p1=%02x p2=%02x data len=%v LE=%v", ins, p1, p2, len(data), le)
+	// pnd.logger.Debugf("  build frame apdu ins=%02x p1=%02x p2=%02x data len=%v LE=%v", ins, p1, p2, len(data), le)
 	frame, err := buildFrameFromAPDU(ins, p1, p2, data, le)
 	if err != nil {
 		return 0, fmt.Errorf("usbSendAPDU frame build: %w", err)
@@ -246,7 +247,7 @@ read:
 		return 0, pnd.LastError
 	}
 	if abtRxBuf[offset] != attemptedResponse {
-		pnd.logger.Errorf("Frame header mismatch")
+		pnd.logger.Errorf("Frame header mismatch (read)")
 		pnd.LastError = gonfc.NFC_EIO
 		return 0, pnd.LastError
 	}
@@ -307,7 +308,7 @@ read:
 
 	offset = 0
 	if abtRxBuf[offset] != attemptedResponse {
-		pnd.logger.Errorf("Frame header mismatch")
+		pnd.logger.Errorf("Frame header mismatch (last)")
 		pnd.LastError = gonfc.NFC_EIO
 		return 0, pnd.LastError
 	}
@@ -393,4 +394,8 @@ func (pnd *Acr122UsbDevice) SetPropertyInt(property gonfc.Property, value int) e
 func (pnd *Acr122UsbDevice) SetPropertyDuration(property gonfc.Property, value time.Duration) error {
 	pnd.logger.Debugf("  SetPropertyDuration %v: %v", gonfc.PropertyInfos[property].Name, value)
 	return pnd.chip.SetPropertyDuration(property, value)
+}
+
+func (pnd *Acr122UsbDevice) InitiatorTargetIsPresent(nt *gonfc.NfcTarget) (bool, error) {
+	return pnd.chip.InitiatorTargetIsPresent(nt)
 }

@@ -1,10 +1,10 @@
 package pn53x
 
-func (pnd *chipCommon) InitiatorDeselectTarget() error {
+func (pnd *Chip) InitiatorDeselectTarget() error {
 	return pnd.InDeselect(0) // 0 mean deselect all selected targets
 }
 
-func (pnd *chipCommon) InDeselect(target byte) error {
+func (pnd *Chip) InDeselect(target byte) error {
 	if pnd.chipType == RCS360 {
 		// We should do act here *only* if a target was previously selected
 		abtStatus := make([]byte, PN53x_EXTENDED_FRAME__DATA_MAX_LEN)

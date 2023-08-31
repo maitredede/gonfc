@@ -6,7 +6,7 @@ import (
 	"github.com/maitredede/gonfc"
 )
 
-func (pnd *chipCommon) SetPropertyDuration(property gonfc.Property, value time.Duration) error {
+func (pnd *Chip) SetPropertyDuration(property gonfc.Property, value time.Duration) error {
 	switch property {
 	case gonfc.NP_TIMEOUT_COMMAND:
 		pnd.timeoutCommand = value
@@ -21,7 +21,7 @@ func (pnd *chipCommon) SetPropertyDuration(property gonfc.Property, value time.D
 	return gonfc.NFC_EINVARG
 }
 
-func (pnd *chipCommon) SetPropertyInt(property gonfc.Property, value int) error {
+func (pnd *Chip) SetPropertyInt(property gonfc.Property, value int) error {
 	// pnd.logger.Debugf("  setPropertyInt %v: %v", gonfc.PropertyInfos[property].Name, value)
 	switch property {
 	case gonfc.NP_TIMEOUT_COMMAND:
@@ -65,7 +65,7 @@ func (pnd *chipCommon) SetPropertyInt(property gonfc.Property, value int) error 
 	return nil
 }
 
-func (pnd *chipCommon) SetPropertyBool(property gonfc.Property, value bool) error {
+func (pnd *Chip) SetPropertyBool(property gonfc.Property, value bool) error {
 	// pnd.logger.Debugf("  setPropertyBool %v: %v", gonfc.PropertyInfos[property].Name, value)
 	switch property {
 	case gonfc.NP_HANDLE_CRC:
@@ -200,7 +200,7 @@ func (pnd *chipCommon) SetPropertyBool(property gonfc.Property, value bool) erro
 	return gonfc.NFC_EINVARG
 }
 
-func (pnd *chipCommon) RFConfiguration__Various_timings(fATR_RES_Timeout byte, fRetryTimeout byte) error {
+func (pnd *Chip) RFConfiguration__Various_timings(fATR_RES_Timeout byte, fRetryTimeout byte) error {
 	abtCmd := []byte{
 		byte(RFConfiguration),
 		byte(RFCI_TIMING),
@@ -212,7 +212,7 @@ func (pnd *chipCommon) RFConfiguration__Various_timings(fATR_RES_Timeout byte, f
 	return err
 }
 
-func (pnd *chipCommon) RFConfiguration__MaxRetries(MxRtyATR byte, MxRtyPSL byte, MxRtyPassiveActivation byte) error {
+func (pnd *Chip) RFConfiguration__MaxRetries(MxRtyATR byte, MxRtyPSL byte, MxRtyPassiveActivation byte) error {
 	abtCmd := []byte{
 		byte(RFConfiguration),
 		byte(RFCI_RETRY_SELECT),
@@ -224,7 +224,7 @@ func (pnd *chipCommon) RFConfiguration__MaxRetries(MxRtyATR byte, MxRtyPSL byte,
 	return err
 }
 
-func (pnd *chipCommon) RFConfiguration__RF_field(enable bool) error {
+func (pnd *Chip) RFConfiguration__RF_field(enable bool) error {
 	var val byte = 0x00
 	if enable {
 		val = 0x01

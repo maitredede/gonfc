@@ -18,6 +18,8 @@ type Device interface {
 	InitiatorSelectPassiveTarget(m Modulation, initData []byte) (*NfcTarget, error)
 	InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error)
 	InitiatorDeselectTarget() error
+	InitiatorPollTarget(modulations []Modulation, pollnr byte, period byte) (*NfcTarget, error)
+	InitiatorTargetIsPresent(nt *NfcTarget) (bool, error)
 
 	//WIP
 	SetLastError(err error)

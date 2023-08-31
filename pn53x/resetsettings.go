@@ -2,7 +2,7 @@ package pn53x
 
 import "github.com/maitredede/gonfc"
 
-func (pnd *chipCommon) resetSettings() error {
+func (pnd *Chip) resetSettings() error {
 	// pnd.logger.Debugf("resetSettings")
 	pnd.ui8TxBits = 0
 	// Reset the ending transmission bits register, it is unknown what the last tranmission used there

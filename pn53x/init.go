@@ -6,7 +6,7 @@ var (
 	pn53xSupportedModulationAsTarget []gonfc.ModulationType = []gonfc.ModulationType{gonfc.NMT_ISO14443A, gonfc.NMT_FELICA, gonfc.NMT_DEP}
 )
 
-func (pnd *chipCommon) Init() error {
+func (pnd *Chip) Init() error {
 	// pnd.logger.Debug("Init")
 	if err := pnd.decodeFirmwareVersion(); err != nil {
 		return err

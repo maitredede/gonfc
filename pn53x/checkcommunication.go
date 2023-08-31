@@ -6,7 +6,7 @@ import (
 	"github.com/maitredede/gonfc"
 )
 
-func (c *chipCommon) CheckCommunication() error {
+func (c *Chip) CheckCommunication() error {
 	abtCmd := []byte{byte(Diagnose), 0x00, 'g', 'o', '-', 'n', 'f', 'c'}
 	abtExpectedRx := []byte{0x00, 'g', 'o', '-', 'n', 'f', 'c'}
 

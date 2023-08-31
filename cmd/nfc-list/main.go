@@ -1,16 +1,18 @@
 package main
 
 import (
-	"flag"
+	goflag "flag"
 
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/cmd/common"
+	flag "github.com/spf13/pflag"
 	"go.uber.org/zap"
 )
 
 var logger *zap.SugaredLogger
 
 func main() {
+	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 	flag.Parse()
 
 	log := common.InitLogger(true)
@@ -48,7 +50,10 @@ func mainDev(devID gonfc.DeviceID) {
 	}
 	defer device.Close()
 
-	if err := device.InitiatorInit(); err != nil {
+	logger.Debugf("=============================================")
+	logger.Debugf("=== InitiatorInit")
+
+	if err := gonfc.InitiatorInit(device); err != nil {
 		logger.Errorf("initiator_init: %w", err)
 		return
 	}
@@ -56,9 +61,21 @@ func mainDev(devID gonfc.DeviceID) {
 	logger.Infof("NFC Device %v opened", device)
 
 	listDev(device, gonfc.NMT_ISO14443A, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_FELICA, gonfc.Nbr212)
+	// listDev(device, gonfc.NMT_FELICA, gonfc.Nbr424)
+	// listDev(device, gonfc.NMT_ISO14443B, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_ISO14443BI, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_ISO14443B2SR, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_ISO14443B2CT, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_ISO14443BICLASS, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_JEWEL, gonfc.Nbr106)
+	// listDev(device, gonfc.NMT_BARCODE, gonfc.Nbr106)
 }
 
 func listDev(device gonfc.Device, modulationType gonfc.ModulationType, speed gonfc.BaudRate) {
+	logger.Debugf("=============================================")
+	logger.Debugf("=== InitiatorListPassiveTargets")
+
 	m := gonfc.Modulation{Type: modulationType, BaudRate: speed}
 	targets, err := gonfc.InitiatorListPassiveTargets(device, m)
 	if err != nil {

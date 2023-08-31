@@ -8,10 +8,10 @@ const (
 	PowerModeLowVBat
 )
 
-func (c *chipCommon) PowerMode() PowerMode {
+func (c *Chip) PowerMode() PowerMode {
 	return c.powerMode
 }
 
-func (c *chipCommon) SetPowerMode(mode PowerMode) {
+func (c *Chip) SetPowerMode(mode PowerMode) {
 	c.powerMode = mode
 }

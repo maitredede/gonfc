@@ -6,7 +6,7 @@ import (
 	"github.com/maitredede/gonfc"
 )
 
-func (pnd *chipCommon) decodeFirmwareVersion() error {
+func (pnd *Chip) decodeFirmwareVersion() error {
 	// pnd.logger.Debug("decodeFirmwareVersion enter")
 	// defer pnd.logger.Debug("decodeFirmwareVersion exit")
 

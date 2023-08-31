@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/google/gousb v1.1.2
 	github.com/maitredede/go-pigpiod v0.0.0-20230830024520-9b46e3b2b48a
+	github.com/spf13/pflag v1.0.5
 	go.uber.org/zap v1.25.0
 )
 

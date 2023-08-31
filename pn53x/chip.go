@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type chipCommon struct {
+type Chip struct {
 	io     IO
 	logger *zap.SugaredLogger
 
@@ -29,22 +29,30 @@ type chipCommon struct {
 	timeoutAtr           time.Duration
 	timeoutCommunication time.Duration
 	operatingMode        OperatingMode
+	timerCorrection      int
+	ui8TxBits            byte
+	ui8Parameters        byte
+	bCrc                 bool
+	samMode              SamMode
+	lastCommand          Command
+	lastStatusByte       byte
+	bAutoIso14443_4      bool
+	currentTarget        *gonfc.NfcTarget
+	progressivefield     bool
 
-	ui8TxBits     byte
-	ui8Parameters byte
-	bCrc          bool
-	samMode       SamMode
-	bPar          compat.BoolFieldGetSet
-
-	lastCommand    Command
-	lastStatusByte byte
-	lastError      compat.ErrorFieldGetSet
-
+	abortFlag       compat.BoolFieldGetSet
+	bPar            compat.BoolFieldGetSet
+	lastError       compat.ErrorFieldGetSet
 	bEasyFraming    compat.BoolFieldGetSet
 	bInfiniteSelect compat.BoolFieldGetSet
-	bAutoIso14443_4 bool
 }
 
-func (pnd *chipCommon) LastCommandByte() byte {
+func (pnd *Chip) LastCommandByte() byte {
 	return byte(pnd.lastCommand)
+}
+
+// currentTargetIs
+// chips/pn53x.c pn53x_current_target_is
+func (pnd *Chip) currentTargetIs(nt *gonfc.NfcTarget) bool {
+	return pnd.currentTarget.Equals(nt)
 }

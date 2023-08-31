@@ -11,5 +11,15 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/nfc-list",
         },
+        {
+            "name": "nfc-poll",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/nfc-poll",
+            "args": [
+                "--disable-remote-i2c",
+            ]
+        },
     ]
 }

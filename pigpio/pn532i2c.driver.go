@@ -93,9 +93,9 @@ func (d *PN532PiGPIOI2CDriver) openDevice(logger *zap.SugaredLogger) (*PN532PiGP
 	bInfiniteSelect := compat.NewBoolFieldGetSet(func() bool { return dev.InfiniteSelect }, func(b bool) { dev.InfiniteSelect = b })
 	bPar := compat.NewBoolFieldGetSet(func() bool { return dev.Par }, func(b bool) { dev.Par = b })
 	bEasyFraming := compat.NewBoolFieldGetSet(func() bool { return dev.EasyFraming }, func(b bool) { dev.EasyFraming = b })
-	chip, err := pn53x.NewPN532I2CChip(
-		logger,
+	chip, err := pn53x.NewChipPN532(
 		io,
+		logger,
 		bInfiniteSelect,
 		lastError,
 		bPar,
