@@ -15,10 +15,15 @@ type Device interface {
 	SetPropertyDuration(property Property, value time.Duration) error
 
 	InitiatorInit() error
+	// InitiatorInitSecureElement() error
 	InitiatorSelectPassiveTarget(m Modulation, initData []byte) (*NfcTarget, error)
-	InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error)
-	InitiatorDeselectTarget() error
 	InitiatorPollTarget(modulations []Modulation, pollnr byte, period byte) (*NfcTarget, error)
+	// InitiatorSelectDepTarget(ndm DepMode, nbr BaudRate, pndiInitiator *DepInfo, timeout time.Duration) (*NfcTarget, error)
+	InitiatorDeselectTarget() error
+	InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error)
+	// InitiatorTransceiveBits()
+	// InitiatorTransceiveBytesTimed()
+	// InitiatorTransceiveBitsTimed()
 	InitiatorTargetIsPresent(nt *NfcTarget) (bool, error)
 
 	//WIP
