@@ -21,5 +21,23 @@
                 "--disable-remote-i2c",
             ]
         },
+        {
+            "name": "nfc-scan-device",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/nfc-scan-device",
+            "args": [
+                "--disable-remote-i2c",
+            ]
+        },
+        {
+            "name": "periphio-info",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/periphio-info",
+            "args": []
+        },
     ]
 }

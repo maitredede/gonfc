@@ -5,27 +5,39 @@ import (
 
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/acr122usb"
+	"github.com/maitredede/gonfc/periphio"
 	"github.com/maitredede/gonfc/pigpio"
 	"go.uber.org/zap"
 )
 
 var (
-	disableRemoteI2C bool
+	disablePigpioI2C   bool
+	disablePeriphioI2C bool
 )
 
 func init() {
-	flag.BoolVar(&disableRemoteI2C, "disable-remote-i2c", false, "Disable remote I2C")
+	flag.BoolVar(&disablePigpioI2C, "disable-pidpio-i2c", false, "Disable pigpio I2C")
+	flag.BoolVar(&disablePeriphioI2C, "disable-periphio-i2c", false, "Disable periph.io I2C")
 }
 
 func RegisterAllDrivers(logger *zap.SugaredLogger) []gonfc.Driver {
 	drvs := []gonfc.Driver{
 		&acr122usb.Acr122USBDriver{},
 	}
-	if !disableRemoteI2C {
-		// I have a raspberry pi with pigpiod installed
+	if !disablePigpioI2C {
+		// Remote raspberry pi with pigpiod installed
 		i2cDrv, err := pigpio.NewI2CDriver("10.105.3.76:8888", 1, 0x24, 0)
 		if err != nil {
-			logger.Warnf("i2c driver not available: %v", err)
+			logger.Warnf("pigpio i2c driver not available: %v", err)
+		} else {
+			drvs = append(drvs, i2cDrv)
+		}
+	}
+	if !disablePeriphioI2C {
+		// Local I2C using Periph.io
+		i2cDrv, err := periphio.NewPeriphioI2CDriver("", 0x24)
+		if err != nil {
+			logger.Warnf("periphio i2c driver not available: %v", err)
 		} else {
 			drvs = append(drvs, i2cDrv)
 		}

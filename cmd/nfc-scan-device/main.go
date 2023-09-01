@@ -7,6 +7,7 @@ import (
 	"github.com/maitredede/gonfc/cmd/common"
 	flag "github.com/spf13/pflag"
 	"go.uber.org/zap"
+	"periph.io/x/host/v3"
 )
 
 var logger *zap.SugaredLogger
@@ -22,6 +23,12 @@ func main() {
 
 	logger := log.Sugar()
 	logger.Infof("gonfc version of nfc-scan-device")
+
+	//periphio
+	_, err := host.Init()
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	drvs := common.RegisterAllDrivers(logger)
 
