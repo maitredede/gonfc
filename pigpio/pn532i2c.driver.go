@@ -88,7 +88,7 @@ func (d *PN532PiGPIOI2CDriver) openDevice(logger *zap.SugaredLogger) (*PN532PiGP
 	io := &pn532i2cIO{
 		device: dev,
 	}
-	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.abortFlag }, func(b bool) { dev.abortFlag = b })
+	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.AbortFlag }, func(b bool) { dev.AbortFlag = b })
 	lastError := compat.NewErrorFieldGetSet(func() error { return dev.LastError }, func(err error) { dev.LastError = err })
 	bInfiniteSelect := compat.NewBoolFieldGetSet(func() bool { return dev.InfiniteSelect }, func(b bool) { dev.InfiniteSelect = b })
 	bPar := compat.NewBoolFieldGetSet(func() bool { return dev.Par }, func(b bool) { dev.Par = b })

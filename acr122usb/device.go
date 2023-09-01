@@ -49,7 +49,6 @@ type Acr122UsbDevice struct {
 	done            func()
 	name            string
 	timerCorrection int
-	abortFlag       bool
 
 	chip *pn53x.Chip
 
@@ -229,8 +228,8 @@ read:
 	// l.Debugf("  usbBulkRead n=%v err=%v", n, err)
 	attemptedResponse := RDR_to_PC_DataBlock
 	if os.IsTimeout(err) {
-		if pnd.abortFlag {
-			pnd.abortFlag = false
+		if pnd.AbortFlag {
+			pnd.AbortFlag = false
 			pnd.usbAck()
 			pnd.LastError = gonfc.NFC_EOPABORTED
 			return 0, pnd.LastError
@@ -289,8 +288,8 @@ read:
 		}
 		n, err := pnd.usbSendAPDU(APDU_GetAdditionnalData, 0x00, 0x00, nil, rxB11, abtRxBuf)
 		if os.IsTimeout(err) {
-			if pnd.abortFlag {
-				pnd.abortFlag = false
+			if pnd.AbortFlag {
+				pnd.AbortFlag = false
 				pnd.usbAck()
 				pnd.LastError = gonfc.NFC_EOPABORTED
 				return 0, pnd.LastError

@@ -40,4 +40,5 @@ type NFCDeviceCommon struct {
 	InfiniteSelect bool
 	Par            bool
 	EasyFraming    bool
+	AbortFlag      bool
 }

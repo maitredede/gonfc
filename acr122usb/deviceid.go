@@ -86,7 +86,7 @@ func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 
 	// libnfc.acr122_usb_get_usb_device_name
 	dev.name = dev.usbGetUsbDeviceName()
-	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.abortFlag }, func(b bool) { dev.abortFlag = b })
+	abortFlag := compat.NewBoolFieldGetSet(func() bool { return dev.AbortFlag }, func(b bool) { dev.AbortFlag = b })
 	bInfiniteSelect := compat.NewBoolFieldGetSet(func() bool { return dev.InfiniteSelect }, func(b bool) { dev.InfiniteSelect = b })
 	lastError := compat.NewErrorFieldGetSet(func() error { return dev.LastError }, func(b error) { dev.LastError = b })
 	bPar := compat.NewBoolFieldGetSet(func() bool { return dev.Par }, func(b bool) { dev.Par = b })

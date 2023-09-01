@@ -20,7 +20,6 @@ type PN532PiGPIOI2CDevice struct {
 
 	gonfc.NFCDeviceCommon
 
-	abortFlag       bool
 	transactionStop time.Time
 }
 
@@ -152,9 +151,9 @@ func (pnd *PN532PiGPIOI2CDevice) waitRdyFrame(pbtData []byte, timeout time.Durat
 	var resErr error
 	for {
 		recCount, err := pnd.i2cRead(i2cRx)
-		if pnd.abortFlag {
+		if pnd.AbortFlag {
 			// Reset abort flag
-			pnd.abortFlag = false
+			pnd.AbortFlag = false
 			pnd.logger.Debug("Wait for a READY frame has been aborted.")
 			return 0, gonfc.NFC_EOPABORTED
 		}
