@@ -3,13 +3,22 @@ package acr122usb
 import (
 	"bytes"
 	"testing"
+
+	"github.com/maitredede/gonfc/utils"
 )
 
 func TestCcidHeaderWrite(t *testing.T) {
-
+	expected := []byte{
+		0x01,
+		// https://commons.wikimedia.org/wiki/File:Little-Endian.svg
+		0x01, 0x00, 0x00, 0x00,
+		0x06,
+		0x07,
+		0x08, 0x09, 0x0a,
+	}
 	data := ccidHeader{
 		bMessageType:     0x01,
-		dwLength:         0x02030405,
+		dwLength:         0x00000001,
 		bSlot:            0x06,
 		bSeq:             0x07,
 		bMessageSpecific: [3]byte{0x08, 0x09, 0x0A},
@@ -23,12 +32,10 @@ func TestCcidHeaderWrite(t *testing.T) {
 		t.Fatal("length mismatch")
 	}
 
-	expected := make([]byte, sizeOfCcidHeader)
-	for i := byte(1); int(i) <= len(expected); i++ {
-		expected[i-1] = i
-	}
 	real := buff.Bytes()
 	if !bytes.Equal(expected, real) {
+		t.Logf("exp=%v", utils.ToHexString(expected))
+		t.Logf("has=%v", utils.ToHexString(real))
 		t.Fatal("content mismatch")
 	}
 }
