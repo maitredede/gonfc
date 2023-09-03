@@ -85,6 +85,10 @@ func (d *Acr122UsbDevice) Logger() *zap.SugaredLogger {
 	return d.logger
 }
 
+func (d *Acr122UsbDevice) String() string {
+	return d.id.String()
+}
+
 func (d *Acr122UsbDevice) SetLastError(err error) {
 	d.LastError = err
 }

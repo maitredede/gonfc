@@ -9,6 +9,7 @@ import (
 type Device interface {
 	ID() DeviceID
 	Close() error
+	String() string
 
 	SetPropertyBool(property Property, value bool) error
 	SetPropertyInt(property Property, value int) error

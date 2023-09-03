@@ -33,9 +33,14 @@ func (d *PN532PiGPIOI2CDevice) Logger() *zap.SugaredLogger {
 	return d.logger
 }
 
+func (d *PN532PiGPIOI2CDevice) String() string {
+	return d.id.String()
+}
+
 func (d *PN532PiGPIOI2CDevice) SetLastError(err error) {
 	d.LastError = err
 }
+
 func (d *PN532PiGPIOI2CDevice) GetInfiniteSelect() bool {
 	return d.InfiniteSelect
 }

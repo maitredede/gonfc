@@ -21,6 +21,10 @@ func (d *PN532PiGPIOI2CDeviceID) Path() string {
 	return fmt.Sprintf("tcp://%v?bus=%v&addr=%v&flags=%v", d.drv.host, d.drv.i2cBus, d.drv.i2cAddress, d.drv.i2cFlags)
 }
 
+func (d *PN532PiGPIOI2CDeviceID) String() string {
+	return fmt.Sprintf("%s %s", d.drv.String(), d.Path())
+}
+
 func (d *PN532PiGPIOI2CDeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 	dev, err := d.drv.openDevice(logger)
 	if err != nil {

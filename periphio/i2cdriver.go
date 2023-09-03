@@ -42,6 +42,10 @@ func (d *PeriphioI2CDriver) Product() string {
 	return "pn532-i2c"
 }
 
+func (d *PeriphioI2CDriver) String() string {
+	return fmt.Sprintf("%s %s", d.Manufacturer(), d.Product())
+}
+
 func (d *PeriphioI2CDriver) LookupDevices(logger *zap.SugaredLogger) ([]gonfc.DeviceID, error) {
 	dev, err := d.openDevice(logger)
 	if err != nil {

@@ -1,6 +1,8 @@
 package acr122usb
 
 import (
+	"fmt"
+
 	"github.com/google/gousb"
 	"github.com/maitredede/gonfc"
 	"go.uber.org/zap"
@@ -27,6 +29,10 @@ func (Acr122USBDriver) Manufacturer() string {
 
 func (Acr122USBDriver) Product() string {
 	return "acr122"
+}
+
+func (d Acr122USBDriver) String() string {
+	return fmt.Sprintf("%s %s", d.Manufacturer(), d.Product())
 }
 
 func (Acr122USBDriver) Conflicts(otherDriver gonfc.Driver) bool {

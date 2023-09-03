@@ -24,3 +24,7 @@ func (d *PeriphioI2CDeviceID) Path() string {
 func (d *PeriphioI2CDeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
 	return d.drv.openDevice(logger)
 }
+
+func (d *PeriphioI2CDeviceID) String() string {
+	return fmt.Sprintf("%s %s", d.drv.String(), d.Path())
+}

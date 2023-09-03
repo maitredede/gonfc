@@ -36,11 +36,15 @@ func NewI2CDriver(host string, i2cBus byte, i2cAddress byte, i2cFlags uint32) (*
 }
 
 func (d *PN532PiGPIOI2CDriver) Manufacturer() string {
-	return "PN532 I2C via PiGPIO"
+	return "PiGPIO - PN532 I2C"
 }
 
 func (d *PN532PiGPIOI2CDriver) Product() string {
 	return d.host
+}
+
+func (d *PN532PiGPIOI2CDriver) String() string {
+	return fmt.Sprintf("%s %s", d.Manufacturer(), d.Product())
 }
 
 func (d *PN532PiGPIOI2CDriver) Conflicts(otherDriver gonfc.Driver) bool {

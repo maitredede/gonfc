@@ -36,6 +36,10 @@ func (d *PeriphioI2CDevice) Close() error {
 	return d.hwBus.Close()
 }
 
+func (d *PeriphioI2CDevice) String() string {
+	return d.id.String()
+}
+
 func (d *PeriphioI2CDevice) SetPropertyBool(property gonfc.Property, value bool) error {
 	panic("TODO")
 }

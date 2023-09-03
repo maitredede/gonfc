@@ -10,10 +10,12 @@ type Driver interface {
 	LookupDevices(logger *zap.SugaredLogger) ([]DeviceID, error)
 
 	Conflicts(otherDriver Driver) bool
+	String() string
 }
 
 type DeviceID interface {
 	Driver() Driver
 	Path() string
 	Open(logger *zap.SugaredLogger) (Device, error)
+	String() string
 }
