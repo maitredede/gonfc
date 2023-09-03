@@ -96,3 +96,7 @@ func (d *PeriphioI2CDevice) GetSupportedBaudRate(nmt gonfc.ModulationType) ([]go
 func (d *PeriphioI2CDevice) GetSupportedBaudRateTargetMode(nmt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
 	panic("TODO")
 }
+
+func (pnd *PeriphioI2CDevice) InitiatorTransceiveBits(tx []byte, txBits int, txPar []byte, rx []byte, rxPar []byte) (int, error) {
+	return pnd.chip.InitiatorTransceiveBits(tx, txBits, txPar, rx, rxPar)
+}

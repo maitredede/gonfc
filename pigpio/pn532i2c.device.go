@@ -207,3 +207,7 @@ func (pnd *PN532PiGPIOI2CDevice) GetSupportedBaudRate(mt gonfc.ModulationType) (
 func (pnd *PN532PiGPIOI2CDevice) GetSupportedBaudRateTargetMode(mt gonfc.ModulationType) ([]gonfc.BaudRate, error) {
 	return pnd.chip.GetSupportedBaudRate(gonfc.N_TARGET, mt)
 }
+
+func (pnd *PN532PiGPIOI2CDevice) InitiatorTransceiveBits(tx []byte, txBits int, txPar []byte, rx []byte, rxPar []byte) (int, error) {
+	return pnd.chip.InitiatorTransceiveBits(tx, txBits, txPar, rx, rxPar)
+}

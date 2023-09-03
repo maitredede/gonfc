@@ -402,3 +402,7 @@ func (pnd *Acr122UsbDevice) SetPropertyDuration(property gonfc.Property, value t
 func (pnd *Acr122UsbDevice) InitiatorTargetIsPresent(nt *gonfc.NfcTarget) (bool, error) {
 	return pnd.chip.InitiatorTargetIsPresent(nt)
 }
+
+func (pnd *Acr122UsbDevice) InitiatorTransceiveBits(tx []byte, txBits int, txPar []byte, rx []byte, rxPar []byte) (int, error) {
+	return pnd.chip.InitiatorTransceiveBits(tx, txBits, txPar, rx, rxPar)
+}

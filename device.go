@@ -22,7 +22,7 @@ type Device interface {
 	// InitiatorSelectDepTarget(ndm DepMode, nbr BaudRate, pndiInitiator *DepInfo, timeout time.Duration) (*NfcTarget, error)
 	InitiatorDeselectTarget() error
 	InitiatorTransceiveBytes(tx, rx []byte, timeout time.Duration) (int, error)
-	// InitiatorTransceiveBits()
+	InitiatorTransceiveBits(tx []byte, txBits int, txPar []byte, rx []byte, rxPar []byte) (int, error)
 	// InitiatorTransceiveBytesTimed()
 	// InitiatorTransceiveBitsTimed()
 	InitiatorTargetIsPresent(nt *NfcTarget) (bool, error)
