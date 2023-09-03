@@ -3,6 +3,7 @@ package common
 import (
 	"flag"
 
+	"github.com/google/gousb"
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/acr122usb"
 	"github.com/maitredede/gonfc/periphio"
@@ -20,9 +21,9 @@ func init() {
 	flag.BoolVar(&disablePeriphioI2C, "disable-periphio-i2c", false, "Disable periph.io I2C")
 }
 
-func RegisterAllDrivers(logger *zap.SugaredLogger) []gonfc.Driver {
+func RegisterAllDrivers(logger *zap.SugaredLogger, usb *gousb.Context) []gonfc.Driver {
 	drvs := []gonfc.Driver{
-		&acr122usb.Acr122USBDriver{},
+		acr122usb.NewDriver(usb),
 	}
 	if !disablePigpioI2C {
 		// Remote raspberry pi with pigpiod installed

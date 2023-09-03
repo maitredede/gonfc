@@ -3,6 +3,7 @@ package main
 import (
 	goflag "flag"
 
+	"github.com/google/gousb"
 	"github.com/maitredede/gonfc"
 	"github.com/maitredede/gonfc/cmd/common"
 	flag "github.com/spf13/pflag"
@@ -24,13 +25,17 @@ func main() {
 	logger = log.Sugar()
 	logger.Infof("gonfc version of nfc-list")
 
+	//gousb
+	usb := gousb.NewContext()
+	defer usb.Close()
+
 	//periphio
 	_, err := host.Init()
 	if err != nil {
 		logger.Fatal(err)
 	}
 
-	drvs := common.RegisterAllDrivers(logger)
+	drvs := common.RegisterAllDrivers(logger, usb)
 
 	devices := make([]gonfc.DeviceID, 0)
 	for _, d := range drvs {

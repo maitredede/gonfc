@@ -34,9 +34,7 @@ func (d *acr122DeviceID) String() string {
 
 // Open opens an acr122 usb device (libnfc: acr122_usb_open)
 func (d *acr122DeviceID) Open(logger *zap.SugaredLogger) (gonfc.Device, error) {
-	c := usbctx()
-
-	devs, err := c.OpenDevices(func(desc *gousb.DeviceDesc) bool {
+	devs, err := d.driver.usb.OpenDevices(func(desc *gousb.DeviceDesc) bool {
 		return slices.Equal(desc.Path, d.desc.Path)
 	})
 	if len(devs) == 0 {

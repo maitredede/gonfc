@@ -1,22 +1,22 @@
 package acr122usb
 
 import (
-	"sync"
-
 	"github.com/google/gousb"
 	"github.com/maitredede/gonfc"
 	"go.uber.org/zap"
 )
 
-var (
-	usbctx = sync.OnceValue(initCtx)
-)
-
-func initCtx() *gousb.Context {
-	return gousb.NewContext()
+type Acr122USBDriver struct {
+	usb *gousb.Context
 }
 
-type Acr122USBDriver struct {
+func NewDriver(usb *gousb.Context) *Acr122USBDriver {
+	if usb == nil {
+		panic("gousb context required")
+	}
+	return &Acr122USBDriver{
+		usb: usb,
+	}
 }
 
 var _ gonfc.Driver = (*Acr122USBDriver)(nil)
@@ -24,6 +24,7 @@ var _ gonfc.Driver = (*Acr122USBDriver)(nil)
 func (Acr122USBDriver) Manufacturer() string {
 	return "libusb"
 }
+
 func (Acr122USBDriver) Product() string {
 	return "acr122"
 }
@@ -37,11 +38,9 @@ func (Acr122USBDriver) Conflicts(otherDriver gonfc.Driver) bool {
 
 func (d *Acr122USBDriver) LookupDevices(logger *zap.SugaredLogger) ([]gonfc.DeviceID, error) {
 
-	c := usbctx()
-
 	result := make([]gonfc.DeviceID, 0)
 
-	devs, err := c.OpenDevices(func(desc *gousb.DeviceDesc) bool {
+	devs, err := d.usb.OpenDevices(func(desc *gousb.DeviceDesc) bool {
 		ok := false
 		var deviceInfo Acr122UsbSupportedDevice
 		for _, d := range UsbSupportedDevices {
