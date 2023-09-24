@@ -1,12 +1,12 @@
 module github.com/maitredede/gonfc
 
-go 1.21
+go 1.21.1
 
 require (
 	github.com/google/gousb v1.1.2
 	github.com/maitredede/go-pigpiod v0.0.0-20230830024520-9b46e3b2b48a
 	github.com/spf13/pflag v1.0.5
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.26.0
 	periph.io/x/conn/v3 v3.7.0
 	periph.io/x/host/v3 v3.8.2
 )
